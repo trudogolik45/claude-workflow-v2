@@ -27,12 +27,14 @@ ls rustfmt.toml .rustfmt.toml clippy.toml 2>/dev/null
 ## Phase 2: Run Linters
 
 ### JavaScript/TypeScript
+
 ```bash
 npx eslint . --ext .js,.ts,.tsx --format stylish
 npx prettier --check .
 ```
 
 ### Python
+
 ```bash
 ruff check .
 # or fallback
@@ -42,6 +44,7 @@ mypy .
 ```
 
 ### Go
+
 ```bash
 golangci-lint run
 gofmt -l .
@@ -49,6 +52,7 @@ go vet ./...
 ```
 
 ### Rust
+
 ```bash
 cargo clippy -- -D warnings
 cargo fmt --check
@@ -57,6 +61,7 @@ cargo fmt --check
 ## Phase 3: Categorize Issues
 
 ### Critical (Must Fix)
+
 - Security vulnerabilities
 - Undefined variables
 - Type errors
@@ -64,12 +69,14 @@ cargo fmt --check
 - SQL injection patterns
 
 ### Warnings (Should Fix)
+
 - Unused variables/imports
 - Missing return types
 - Inconsistent naming
 - Complex expressions
 
 ### Style (Auto-fixable)
+
 - Formatting issues
 - Import ordering
 - Trailing whitespace
@@ -129,9 +136,4 @@ cargo fmt
 
 ## Usage
 
-Copy to your project:
-```bash
-cp templates/subagents/lint-check.md .claude/commands/
-```
-
-Invoke with: `/project:lint-check`
+This command ships with the project-starter plugin. Invoke with: `/project-starter:lint-check`

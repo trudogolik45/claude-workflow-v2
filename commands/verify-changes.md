@@ -58,38 +58,37 @@ Task 5: {
 }
 ```
 
-After all complete, use TaskOutput to retrieve each result:
-```
-TaskOutput: task_1_id
-TaskOutput: task_2_id
-TaskOutput: task_3_id
-TaskOutput: task_4_id
-TaskOutput: task_5_id
-```
+Each subagent returns its result automatically when it completes — there is no
+separate retrieval call. Read each verifier's report as it returns.
 
 ### Subagent Details
 
 ### Subagent 1: Syntax & Type Check
+
 - Run language-specific type checker (tsc, mypy, go vet)
 - Report any type errors or warnings
 - Exit with list of issues found
 
 ### Subagent 2: Test Runner
+
 - Run tests for affected files first
 - Run related integration tests
 - Report failures with file:line context
 
 ### Subagent 3: Lint & Style Check
+
 - Run project linter (eslint, ruff, golangci-lint)
 - Check for formatting issues
 - Report violations with severity
 
 ### Subagent 4: Security Scan
+
 - Grep for hardcoded secrets (passwords, API keys, tokens)
 - Check for common vulnerabilities in new code
 - Review any new dependencies
 
 ### Subagent 5: Build Validator
+
 - Run build command
 - Verify build artifacts exist
 - Check for build warnings
@@ -99,16 +98,19 @@ TaskOutput: task_5_id
 Spawn 3 adversarial subagents to review Phase 2 findings:
 
 ### Adversarial A: False Positive Filter
+
 - Review each finding from Phase 2
 - Determine if it's a real issue or false alarm
 - Provide reasoning for each determination
 
 ### Adversarial B: Missing Issues Finder
+
 - Look for issues the first pass might have missed
 - Check edge cases in changed code
 - Verify error handling is adequate
 
 ### Adversarial C: Context Validator
+
 - Verify findings make sense in project context
 - Check if "issues" are actually intentional patterns
 - Consider project conventions
@@ -141,10 +143,4 @@ Combine all subagent outputs into final report:
 
 ## Usage
 
-Copy this file to your project's `.claude/commands/` directory:
-
-```bash
-cp templates/subagents/verify-changes.md .claude/commands/
-```
-
-Then invoke with: `/project:verify-changes`
+This command ships with the project-starter plugin. Invoke with: `/project-starter:verify-changes`

@@ -151,20 +151,9 @@ run_in_background: true
 
 ## Phase 3: Collect Results
 
-After all subagents complete, retrieve each result:
-
-```
-TaskOutput: task_1_id
-TaskOutput: task_2_id
-TaskOutput: task_3_id
-TaskOutput: task_4_id
-TaskOutput: task_5_id
-TaskOutput: task_6_id
-TaskOutput: task_7_id
-TaskOutput: task_8_id
-TaskOutput: task_9_id
-TaskOutput: task_10_id
-```
+Each subagent returns its result automatically when it completes — there is no
+separate retrieval call. Launch the `Task` calls in a single message, then read
+each returned summary as it finishes.
 
 ## Phase 4: Synthesize into CODEBASE.md
 

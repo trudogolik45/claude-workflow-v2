@@ -12,10 +12,10 @@ Scan for hardcoded credentials:
 
 ```bash
 # Common secret patterns
-grep -rn "password\s*[=:]\s*['\"]" --include="*.{js,ts,py,go,java,rb}" . 2>/dev/null | grep -v node_modules | grep -v ".git"
-grep -rn "api[_-]?key\s*[=:]\s*['\"]" --include="*.{js,ts,py,go,java,rb}" . 2>/dev/null | grep -v node_modules
-grep -rn "secret\s*[=:]\s*['\"]" --include="*.{js,ts,py,go,java,rb}" . 2>/dev/null | grep -v node_modules
-grep -rn "token\s*[=:]\s*['\"]" --include="*.{js,ts,py,go,java,rb}" . 2>/dev/null | grep -v node_modules
+grep -rn "password\s*[=:]\s*['\"]" --include=*.js --include=*.ts --include=*.py --include=*.go --include=*.java --include=*.rb . 2>/dev/null | grep -v node_modules | grep -v ".git"
+grep -rn "api[_-]?key\s*[=:]\s*['\"]" --include=*.js --include=*.ts --include=*.py --include=*.go --include=*.java --include=*.rb . 2>/dev/null | grep -v node_modules
+grep -rn "secret\s*[=:]\s*['\"]" --include=*.js --include=*.ts --include=*.py --include=*.go --include=*.java --include=*.rb . 2>/dev/null | grep -v node_modules
+grep -rn "token\s*[=:]\s*['\"]" --include=*.js --include=*.ts --include=*.py --include=*.go --include=*.java --include=*.rb . 2>/dev/null | grep -v node_modules
 
 # AWS keys
 grep -rn "AKIA[0-9A-Z]{16}" . 2>/dev/null | grep -v node_modules
@@ -29,6 +29,7 @@ find . -name "*.pem" -o -name "*.key" -o -name "id_rsa" 2>/dev/null | grep -v no
 Check for vulnerable dependencies:
 
 ### Node.js
+
 ```bash
 npm audit --json 2>/dev/null | head -100
 # or
@@ -36,16 +37,19 @@ yarn audit --json 2>/dev/null | head -100
 ```
 
 ### Python
+
 ```bash
 pip-audit 2>/dev/null || safety check 2>/dev/null
 ```
 
 ### Go
+
 ```bash
 govulncheck ./... 2>/dev/null
 ```
 
 ### Rust
+
 ```bash
 cargo audit 2>/dev/null
 ```
@@ -55,26 +59,31 @@ cargo audit 2>/dev/null
 Check for dangerous patterns:
 
 ### SQL Injection
+
 - String concatenation in SQL queries
 - Unparameterized queries
 - Dynamic table/column names from user input
 
 ### Command Injection
+
 - Shell execution with user input (`exec`, `system`, `subprocess`)
 - Unsanitized path construction
 
 ### XSS Vulnerabilities
+
 - `innerHTML` with user data
 - `dangerouslySetInnerHTML` without sanitization
 - Unescaped template variables
 
 ### Path Traversal
+
 - User input in file paths without sanitization
 - Missing `..` checks
 
 ## Phase 4: Configuration Check
 
 Verify security settings:
+
 - [ ] Debug mode disabled in production configs
 - [ ] HTTPS enforced (no HTTP URLs in prod)
 - [ ] CORS properly configured
@@ -119,9 +128,4 @@ Verify security settings:
 
 ## Usage
 
-Copy to your project:
-```bash
-cp templates/subagents/security-scan.md .claude/commands/
-```
-
-Invoke with: `/project:security-scan`
+This command ships with the project-starter plugin. Invoke with: `/project-starter:security-scan`

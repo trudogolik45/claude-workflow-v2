@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.6] - 2026-02-14
+
+First 2.x release. This entry consolidates the 2.0.x line, which shipped rapidly
+after 1.2.0 and was not previously recorded here.
+
+### Added
+
+- **skills.sh cross-agent compatibility** — the workflow can be distributed to 38+ AI coding agents.
+- **npm installer** (`packages/add-skill`) — `npx install-claude-workflow-v2` installs the plugin's agents, commands, skills, and hooks into a project.
+- **Codex-compatible plugin artifacts** — `.codex/` and `.codex-plugin/` mirror the seven agents and the hook set for Codex-compatible clients, with a CI validation workflow.
+
+### Changed
+
+- Plugin, marketplace, and npm package versions reconciled at `2.0.6` (across `plugin.json`, `marketplace.json`, and `package.json`).
+- Reworked the `verify-on-complete.py` Stop hook.
+- Refreshed the `error-handling` and `security-patterns` skills.
+
+### Fixed
+
+- Resolved a batch of audit findings across agents, hooks, skills, and documentation.
+- `security-check.py` no longer blocks documentation/example files that contain illustrative credential strings, and routes its block reason to stderr so Claude receives it.
+- Restored the `convex-backend` and `vercel-react-best-practices` skill reference documents (`AGENTS.md`) that two SKILL.md files link to.
+- Removed references to a non-existent `TaskOutput` tool from the orchestrator agent and parallel commands.
+
 ## [1.2.0] - 2026-02-14
 
 ### Added
@@ -119,6 +143,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Comprehensive documentation (README, PERMISSIONS, MCP servers guide)
 - MIT License
 
+[2.0.6]: https://github.com/CloudAI-X/claude-workflow-v2/releases/tag/v2.0.6
 [1.2.0]: https://github.com/CloudAI-X/claude-workflow-v2/releases/tag/v1.2.0
 [1.1.0]: https://github.com/CloudAI-X/claude-workflow-v2/releases/tag/v1.1.0
 [1.0.0]: https://github.com/CloudAI-X/claude-workflow-v2/releases/tag/v1.0.0

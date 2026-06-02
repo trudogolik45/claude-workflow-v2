@@ -76,6 +76,7 @@ go test -tags=integration ./...
 ## Phase 4: Analyze Failures
 
 For each failure:
+
 1. Parse error message
 2. Identify failing assertion
 3. Trace to source code
@@ -115,6 +116,7 @@ For each failure:
 ## Continue Until Green
 
 If tests fail:
+
 1. Report the failure clearly
 2. Attempt to fix the failing code (not just the test)
 3. Re-run tests
@@ -122,9 +124,4 @@ If tests fail:
 
 ## Usage
 
-Copy to your project:
-```bash
-cp templates/subagents/run-tests.md .claude/commands/
-```
-
-Invoke with: `/project:run-tests`
+This command ships with the project-starter plugin. Invoke with: `/project-starter:run-tests`

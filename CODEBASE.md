@@ -12,7 +12,7 @@
 | Attribute        | Value                                           |
 | ---------------- | ----------------------------------------------- |
 | **Name**         | project-starter                                 |
-| **Version**      | 1.2.0                                           |
+| **Version**      | 2.0.6                                           |
 | **Type**         | Claude Code Plugin                              |
 | **License**      | MIT                                             |
 | **Author**       | CloudAI-X                                       |
@@ -196,7 +196,7 @@ This plugin uses a **metadata-driven, modular architecture** with no traditional
 │                                                             │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
 │  │   Agents    │  │  Commands   │  │   Skills    │         │
-│  │ (7 specs)   │  │ (19 specs)  │  │ (7 domains) │         │
+│  │ (7 specs)   │  │ (26 specs)  │  │ (14 domains)│         │
 │  └──────┬──────┘  └──────┬──────┘  └──────┬──────┘         │
 │         │                │                │                 │
 │         └────────────────┼────────────────┘                 │
@@ -622,6 +622,14 @@ All tools are optional. Missing tools result in warnings, not failures.
 ---
 
 ## Version History
+
+### v2.0.6 (2026-02-14)
+
+- **skills.sh Compatibility**: Workflow distributable to 38+ AI coding agents
+- **npm Installer**: `npx install-claude-workflow-v2` bootstraps agents, commands, skills, and hooks into a project
+- **Codex Support**: `.codex/` and `.codex-plugin/` artifacts mirror the seven agents and the hook set for Codex-compatible clients
+- **Version Reconciliation**: Plugin, marketplace, and npm package aligned at 2.0.6
+- **Audit Fixes**: Resolved findings across agents, hooks, skills, and docs
 
 ### v1.2.0 (2026-02-14)
 

@@ -11,7 +11,7 @@ Analyze `$ARGUMENTS` from multiple perspectives simultaneously using parallel su
 
 1. **Identify Target**: Parse the file or directory to analyze
 2. **Spawn Perspective Agents**: Launch 4 parallel subagents (one per perspective)
-3. **Collect Results**: Retrieve all analyses via TaskOutput
+3. **Collect Results**: Each subagent returns its analysis automatically on completion
 4. **Synthesize**: Merge findings into unified recommendations
 
 ## Execution Pattern
@@ -76,13 +76,8 @@ Provide recommendations for improving test coverage."
 run_in_background: true
 ```
 
-After all complete, retrieve results:
-```
-TaskOutput: task_1_id
-TaskOutput: task_2_id
-TaskOutput: task_3_id
-TaskOutput: task_4_id
-```
+Each subagent returns its result automatically when it completes — there is no
+separate retrieval step. Read each analysis as it returns.
 
 ## Output Format
 
@@ -90,6 +85,7 @@ TaskOutput: task_4_id
 ## Multi-Perspective Analysis: [Target]
 
 ### Summary
+
 - **Perspectives analyzed**: 4
 - **Total findings**: X
 - **Critical issues**: Y
@@ -100,13 +96,16 @@ TaskOutput: task_4_id
 ### Architecture Perspective
 
 #### Strengths
+
 - [Pattern/decision] - [Why it's good]
 
 #### Concerns
+
 - [Issue] at file:line - [Description]
 - [Issue] at file:line - [Description]
 
 #### Recommendations
+
 - [Improvement] - [Rationale]
 
 ---
@@ -114,12 +113,15 @@ TaskOutput: task_4_id
 ### Security Perspective
 
 #### Critical
+
 - [Vulnerability] at file:line - [Impact]
 
 #### High
+
 - [Issue] at file:line - [Description]
 
 #### Medium/Low
+
 - [Issue] at file:line - [Description]
 
 ---
@@ -127,12 +129,15 @@ TaskOutput: task_4_id
 ### Performance Perspective
 
 #### High Impact
+
 - [Bottleneck] at file:line - [Complexity/Impact]
 
 #### Medium Impact
+
 - [Issue] at file:line - [Description]
 
 #### Optimization Opportunities
+
 - [Opportunity] at file:line - [Expected improvement]
 
 ---
@@ -140,12 +145,15 @@ TaskOutput: task_4_id
 ### Testing Perspective
 
 #### Coverage Gaps
+
 - [Untested area] - [Priority]
 
 #### Missing Test Cases
+
 - [Function/path] - [Suggested tests]
 
 #### Quality Improvements
+
 - [Issue in tests] - [Recommendation]
 
 ---
@@ -153,14 +161,17 @@ TaskOutput: task_4_id
 ### Cross-Perspective Synthesis
 
 #### Priority Actions (Ordered)
+
 1. **[Highest priority]** - [From perspective] - [Why]
 2. **[Second priority]** - [From perspective] - [Why]
 3. **[Third priority]** - [From perspective] - [Why]
 
 #### Interconnected Issues
+
 - [Issue A] affects [Issue B]: [Explanation]
 
 #### Recommended Approach
+
 1. [First action to take]
 2. [Second action to take]
 3. [Third action to take]
@@ -185,9 +196,9 @@ This spawns 4 parallel analysts (architecture, security, performance, testing), 
 
 ## Perspective Details
 
-| Perspective | Focus Areas | Severity Levels |
-|-------------|-------------|-----------------|
-| Architecture | Structure, patterns, coupling | Concern, Suggestion |
-| Security | Vulnerabilities, OWASP | Critical, High, Medium, Low |
-| Performance | Complexity, bottlenecks | High, Medium, Optimization |
-| Testing | Coverage, quality | Gap, Missing, Improvement |
+| Perspective  | Focus Areas                   | Severity Levels             |
+| ------------ | ----------------------------- | --------------------------- |
+| Architecture | Structure, patterns, coupling | Concern, Suggestion         |
+| Security     | Vulnerabilities, OWASP        | Critical, High, Medium, Low |
+| Performance  | Complexity, bottlenecks       | High, Medium, Optimization  |
+| Testing      | Coverage, quality             | Gap, Missing, Improvement   |

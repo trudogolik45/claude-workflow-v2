@@ -254,6 +254,13 @@ All commands use the format `/project-starter:<command>`.
 | `/project-starter:security-scan`   | Security vulnerability detection        |
 | `/project-starter:code-simplifier` | Post-implementation cleanup             |
 
+### Parallel
+
+| Command                             | Purpose                                  |
+| ----------------------------------- | ---------------------------------------- |
+| `/project-starter:parallel-review`  | Review multiple files/dirs via subagents |
+| `/project-starter:parallel-analyze` | Multi-perspective analysis via subagents |
+
 ### Planning & Refactoring
 
 | Command                               | Purpose                                    |
@@ -342,6 +349,7 @@ For detailed multi-agent orchestration examples, see the [examples/](./examples/
 | Example                                                                          | Description                                            |
 | -------------------------------------------------------------------------------- | ------------------------------------------------------ |
 | [Comprehensive Code Review](./examples/orchestration/comprehensive-code-review/) | 6-agent sequential workflow for thorough code analysis |
+| [Parallel Execution](./examples/orchestration/parallel-execution/)               | Fan-out multi-subagent workflow for independent tasks  |
 
 Each example includes:
 
@@ -529,7 +537,9 @@ claude-workflow/
 │   ├── CLAUDE.md.template
 │   ├── settings.json.template
 │   ├── settings.local.json.template
-│   └── mcp.json.template
+│   ├── mcp.json.template
+│   ├── mcp-servers-template.md
+│   └── README.md
 ├── CLAUDE.md                 # Plugin development guidelines
 └── README.md
 ```

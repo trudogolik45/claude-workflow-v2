@@ -27,33 +27,39 @@ git diff HEAD~1
 Look for these patterns:
 
 ### 1. Duplicate Code
+
 - Repeated logic that can be extracted
 - Similar functions that can be merged
 - Copy-pasted code with minor variations
 
 ### 2. Over-Engineering
+
 - Abstractions used only once
 - Unnecessary wrapper functions
 - Over-parameterized functions (too many options)
 - Premature generalization
 
 ### 3. Dead Code
+
 - Unused variables
 - Unreachable branches
 - Commented-out code
 - Unused imports/dependencies
 
 ### 4. Complex Conditionals
+
 - Nested if-else chains (flatten with early returns)
 - Complex boolean expressions (extract to named variables)
 - Guard clauses that can be simplified
 
 ### 5. Long Functions
+
 - Functions > 20 lines (consider splitting)
 - Multiple responsibilities (single responsibility)
 - Too many parameters (use objects)
 
 ### 6. Unnecessary Complexity
+
 - Try-catch around code that can't fail
 - Null checks on values that can't be null
 - Defensive code for impossible cases
@@ -62,7 +68,7 @@ Look for these patterns:
 
 For each finding, present:
 
-```
+````
 ### Simplification: [Short description]
 
 **Location**: `file:line`
@@ -71,15 +77,17 @@ For each finding, present:
 **Current** (X lines):
 ```[lang]
 [code block]
-```
+````
 
 **Simplified** (Y lines):
+
 ```[lang]
 [code block]
 ```
 
 **Benefit**: [Why this is better]
 **Risk**: Low - behavior unchanged
+
 ```
 
 ## Phase 4: Apply Simplifications
@@ -93,9 +101,11 @@ After user approval:
 ## Output Format
 
 ```
+
 ## Simplification Report
 
 ### Changes Analyzed
+
 - Files: [count]
 - Lines added: [count]
 - Lines removed: [count]
@@ -105,17 +115,21 @@ After user approval:
 [List each opportunity with current/simplified code]
 
 ### Summary
+
 - Simplifications found: X
 - Estimated lines reducible: Y
 - Complexity reduction: [High/Medium/Low]
 
 ### Recommended Actions
+
 1. [ ] Apply simplification #1 (highest impact)
 2. [ ] Apply simplification #2
-...
+       ...
 
 ### Tests to Run After
+
 - [List of test commands to verify no behavior change]
+
 ```
 
 ## Safety Rules
@@ -128,9 +142,5 @@ After user approval:
 
 ## Usage
 
-Copy to your project:
-```bash
-cp templates/subagents/code-simplifier.md .claude/commands/
+This command ships with the project-starter plugin. Invoke with: `/project-starter:code-simplifier`
 ```
-
-Invoke with: `/project:code-simplifier`

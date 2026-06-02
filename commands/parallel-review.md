@@ -11,7 +11,7 @@ Review `$ARGUMENTS` using parallel subagents for maximum speed.
 
 1. **Parse Targets**: Split arguments into independent review targets
 2. **Spawn Parallel Reviewers**: Launch one subagent per target
-3. **Collect Results**: Retrieve all reviews via TaskOutput
+3. **Collect Results**: Each subagent returns its review automatically on completion
 4. **Synthesize**: Merge findings into prioritized report
 
 ## Execution Pattern
@@ -46,12 +46,8 @@ prompt: "You are a code reviewer. Analyze [target 3] for..."
 run_in_background: true
 ```
 
-After all complete, retrieve results:
-```
-TaskOutput: task_1_id
-TaskOutput: task_2_id
-TaskOutput: task_3_id
-```
+Each subagent returns its result automatically when it completes — there is no
+separate retrieval step. Read each review as it returns.
 
 ## Output Format
 
@@ -59,6 +55,7 @@ TaskOutput: task_3_id
 ## Parallel Review Results
 
 ### Summary
+
 - **Targets reviewed**: N
 - **Total findings**: X
 - **Critical issues**: Y
@@ -67,15 +64,19 @@ TaskOutput: task_3_id
 ### [Target 1] Findings
 
 #### Critical
+
 - [Issue] at file:line - [Description]
 
 #### Warnings
+
 - [Issue] at file:line - [Description]
 
 #### Suggestions
+
 - [Improvement] at file:line - [Description]
 
 ### [Target 2] Findings
+
 ...
 
 ### Combined Priority List
@@ -83,7 +84,7 @@ TaskOutput: task_3_id
 1. **Critical** - [Target X] - [Issue description]
 2. **Critical** - [Target Y] - [Issue description]
 3. **High** - [Target Z] - [Issue description]
-...
+   ...
 
 ### Recommended Actions
 

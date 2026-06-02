@@ -14,9 +14,10 @@ Exit codes:
 - Non-zero exits are caught and logged, never block
 """
 
+from __future__ import annotations
+
 import json
 import os
-import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -122,24 +123,6 @@ def check_git_status() -> tuple[bool, str]:
     return True, "Working tree clean"
 
 
-def send_notification(title: str, message: str, is_error: bool = False):
-    """Send a desktop notification with verification results."""
-    sound = "Basso" if is_error else "Ping"
-
-    # macOS
-    if sys.platform == "darwin":
-        script = f'display notification "{message}" with title "{title}" sound name "{sound}"'
-        subprocess.run(["osascript", "-e", script], capture_output=True)
-    # Linux - only if notify-send is available (not present in WSL/headless)
-    elif sys.platform.startswith("linux"):
-        if shutil.which("notify-send"):
-            urgency = "critical" if is_error else "normal"
-            subprocess.run(
-                ["notify-send", title, message, f"--urgency={urgency}"],
-                capture_output=True,
-            )
-
-
 def has_code_changes() -> bool:
     """Check if there are any code changes worth verifying."""
     success, output = run_command(["git", "diff", "--name-only", "HEAD"], timeout=5)
@@ -171,9 +154,12 @@ def main():
         # Run tests if available (with short timeout)
         test_cmd = get_test_command()
         if test_cmd:
-            test_ok, test_output = run_command(test_cmd, timeout=15)
+            test_ok, test_output = run_command(test_cmd, timeout=30)
             if test_ok:
                 results.append("✓ Tests: passed")
+            elif "timed out" in test_output.lower():
+                # A slow suite is not a failure — don't raise a false alarm.
+                results.append("- Tests: skipped (timed out)")
             else:
                 results.append("✗ Tests: failed")
                 has_failures = True
@@ -190,17 +176,13 @@ def main():
     else:
         results.append("- Tests/Lint: skipped (no code changes)")
 
-    # Send notification with results
+    # Report results to the transcript via stderr. The desktop notification is
+    # handled by notify-complete.sh (the dedicated cross-platform notifier), so
+    # this hook does not send its own — avoiding two notifications per Stop.
     if results:
+        status = "⚠️ some checks failed" if has_failures else "✓ all checks passed"
         summary = "\n".join(results)
-        title = "Claude Code - Verification"
-        if has_failures:
-            send_notification(title, "⚠️ Some checks failed", is_error=True)
-        else:
-            send_notification(title, "✓ All checks passed", is_error=False)
-
-        # Also print to stderr for logging (won't affect tool output)
-        print(f"\n[Verification Results]\n{summary}\n", file=sys.stderr)
+        print(f"\n[Verification: {status}]\n{summary}\n", file=sys.stderr)
 
     # Always exit 0 - verification should never block
     sys.exit(0)

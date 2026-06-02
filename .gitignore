@@ -40,6 +40,7 @@ yarn-error.log*
 # Logs
 *.log
 logs/
+.firecrawl/
 
 # Environment variables
 .env
@@ -56,4 +57,3 @@ htmlcov/
 # Build artifacts
 *.egg
 *.whl
-

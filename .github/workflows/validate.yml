@@ -6,12 +6,15 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Validate JSON syntax
         run: |
@@ -32,32 +35,28 @@ jobs:
           fi
           echo "All JSON files are valid."
 
-      - name: Validate hook script references in hooks.json
+      - name: Validate Codex hook script references
         run: |
-          echo "=== Checking hook script references ==="
+          echo "=== Checking Codex hook script references ==="
           errors=0
-          # Extract script paths from hooks.json, replacing ${CLAUDE_PLUGIN_ROOT} with .
           scripts=$(python3 -c "
-          import json, re
-          with open('hooks/hooks.json') as f:
+          import json
+          import re
+          with open('.codex/hooks.json') as f:
               data = json.load(f)
           for event_hooks in data.get('hooks', {}).values():
               for group in event_hooks:
                   for hook in group.get('hooks', []):
                       cmd = hook.get('command', '')
-                      # Extract the script path (last argument that looks like a file path)
-                      parts = cmd.split()
-                      for part in parts:
-                          path = part.replace('\${CLAUDE_PLUGIN_ROOT}', '.')
-                          if path.endswith('.py') or path.endswith('.sh'):
-                              print(path)
+                      for match in re.findall(r'/hooks/([^\"\\s]+\\.(?:py|sh))', cmd):
+                          print(f'hooks/{match}')
           ")
 
           for script in $scripts; do
             if [ -f "$script" ]; then
               echo "  OK: $script exists"
             else
-              echo "  FAIL: $script not found (referenced in hooks.json)"
+              echo "  FAIL: $script not found (referenced in .codex/hooks.json)"
               errors=$((errors + 1))
             fi
           done
@@ -106,42 +105,55 @@ jobs:
           fi
           echo "All Bash hooks have valid syntax."
 
-      - name: Validate agent frontmatter
+      - name: Validate Codex agent configuration
         run: |
-          echo "=== Validating agent YAML frontmatter ==="
+          echo "=== Validating Codex agent TOML ==="
           errors=0
-          required_fields="name description tools model"
+          python3 - <<'PY'
+          import sys
+          import tomllib
+          from pathlib import Path
 
-          for f in agents/*.md; do
-            [ -f "$f" ] || continue
-            # Extract frontmatter between --- delimiters
-            frontmatter=$(sed -n '/^---$/,/^---$/p' "$f" | sed '1d;$d')
-            if [ -z "$frontmatter" ]; then
-              echo "  FAIL: $f - no YAML frontmatter found"
-              errors=$((errors + 1))
-              continue
-            fi
+          errors = 0
 
-            missing=""
-            for field in $required_fields; do
-              if ! echo "$frontmatter" | grep -q "^${field}:"; then
-                missing="$missing $field"
-              fi
-            done
+          config_path = Path(".codex/config.toml")
+          if not config_path.exists():
+              print("  FAIL: .codex/config.toml is missing")
+              sys.exit(1)
 
-            if [ -n "$missing" ]; then
-              echo "  FAIL: $f - missing required fields:$missing"
-              errors=$((errors + 1))
-            else
-              echo "  OK: $f"
-            fi
-          done
+          config = tomllib.loads(config_path.read_text(encoding="utf-8"))
+          agents = config.get("agents", {})
+          role_names = [name for name, value in agents.items() if isinstance(value, dict)]
+          if not role_names:
+              print("  FAIL: .codex/config.toml does not declare any [agents.<name>] roles")
+              sys.exit(1)
 
-          if [ "$errors" -gt 0 ]; then
-            echo "::error::$errors agent file(s) have frontmatter issues"
-            exit 1
-          fi
-          echo "All agent frontmatter is valid."
+          for role_name in sorted(role_names):
+              role = agents[role_name]
+              config_file = role.get("config_file")
+              if not config_file:
+                  print(f"  FAIL: agent '{role_name}' is missing config_file")
+                  errors += 1
+                  continue
+              agent_path = (config_path.parent / config_file).resolve()
+              if not agent_path.exists():
+                  print(f"  FAIL: agent '{role_name}' references missing {config_file}")
+                  errors += 1
+                  continue
+              agent_config = tomllib.loads(agent_path.read_text(encoding='utf-8'))
+              if "developer_instructions" not in agent_config:
+                  print(f"  FAIL: {agent_path} is missing developer_instructions")
+                  errors += 1
+                  continue
+              if "name" in agent_config or "description" in agent_config:
+                  print(f"  FAIL: {agent_path} still contains legacy top-level name/description")
+                  errors += 1
+                  continue
+              print(f"  OK: {role_name} -> {config_file}")
+
+          if errors:
+              sys.exit(1)
+          PY
 
       - name: Validate skill frontmatter
         run: |
@@ -179,119 +191,50 @@ jobs:
           fi
           echo "All skill frontmatter is valid."
 
-      - name: Validate command frontmatter
+      - name: Validate Codex plugin manifest references
         run: |
-          echo "=== Validating command YAML frontmatter ==="
+          echo "=== Validating Codex plugin manifest references ==="
           errors=0
-
-          for f in commands/*.md; do
-            [ -f "$f" ] || continue
-            frontmatter=$(sed -n '/^---$/,/^---$/p' "$f" | sed '1d;$d')
-            if [ -z "$frontmatter" ]; then
-              echo "  FAIL: $f - no YAML frontmatter found"
-              errors=$((errors + 1))
-              continue
-            fi
-
-            # Commands must have at least a description field
-            if ! echo "$frontmatter" | grep -q "^description:"; then
-              echo "  FAIL: $f - missing required field: description"
-              errors=$((errors + 1))
-            else
-              echo "  OK: $f"
-            fi
-          done
-
-          if [ "$errors" -gt 0 ]; then
-            echo "::error::$errors command file(s) have frontmatter issues"
-            exit 1
-          fi
-          echo "All command frontmatter is valid."
-
-      - name: Check for broken internal links
-        run: |
-          echo "=== Checking internal links/references ==="
-          errors=0
-
-          # Check that agents referenced in skills fields exist
-          for f in agents/*.md; do
-            [ -f "$f" ] || continue
-            frontmatter=$(sed -n '/^---$/,/^---$/p' "$f" | sed '1d;$d')
-            skills_line=$(echo "$frontmatter" | grep '^skills:' | sed 's/^skills: *//')
-            if [ -n "$skills_line" ]; then
-              IFS=',' read -ra skill_refs <<< "$skills_line"
-              for ref in "${skill_refs[@]}"; do
-                ref=$(echo "$ref" | xargs)  # trim whitespace
-                [ -z "$ref" ] && continue
-                if [ ! -d "skills/$ref" ]; then
-                  echo "  WARN: $f references skill '$ref' but skills/$ref/ does not exist"
-                  # Warnings only - don't fail for skill references since they
-                  # may use shorthand names resolved at runtime
-                fi
-              done
-            fi
-          done
-
-          # Check that hook scripts referenced in hooks.json resolve to real files
-          hook_scripts=$(python3 -c "
+          python3 - <<'PY'
           import json
-          with open('hooks/hooks.json') as f:
-              data = json.load(f)
-          for event_hooks in data.get('hooks', {}).values():
-              for group in event_hooks:
-                  for hook in group.get('hooks', []):
-                      cmd = hook.get('command', '')
-                      parts = cmd.split()
-                      for part in parts:
-                          path = part.replace('\${CLAUDE_PLUGIN_ROOT}', '.')
-                          if path.endswith('.py') or path.endswith('.sh'):
-                              print(path)
-          ")
+          from pathlib import Path
 
-          for script in $hook_scripts; do
-            if [ ! -f "$script" ]; then
-              echo "  FAIL: hooks.json references '$script' which does not exist"
-              errors=$((errors + 1))
-            fi
-          done
+          root = Path(".")
+          manifest_path = root / ".codex-plugin" / "plugin.json"
+          if not manifest_path.exists():
+              print("  FAIL: .codex-plugin/plugin.json is missing")
+              raise SystemExit(1)
 
-          # Check that plugin.json references are consistent
-          if [ -f ".claude-plugin/plugin.json" ]; then
-            echo "  OK: .claude-plugin/plugin.json exists"
-          else
-            echo "  FAIL: .claude-plugin/plugin.json is missing"
-            errors=$((errors + 1))
-          fi
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          for key in ("skills", "hooks"):
+              rel = manifest.get(key)
+              if not rel:
+                  continue
+              target = (root / rel).resolve()
+              if not target.exists():
+                  print(f"  FAIL: manifest {key} path does not exist: {rel}")
+                  raise SystemExit(1)
+              print(f"  OK: manifest {key} path exists -> {rel}")
 
-          if [ -f ".claude-plugin/marketplace.json" ]; then
-            echo "  OK: .claude-plugin/marketplace.json exists"
-          else
-            echo "  FAIL: .claude-plugin/marketplace.json is missing"
-            errors=$((errors + 1))
-          fi
+          for key in ("composerIcon", "logo"):
+              rel = manifest.get("interface", {}).get(key)
+              if not rel:
+                  continue
+              target = (root / rel).resolve()
+              if not target.exists():
+                  print(f"  FAIL: interface asset missing: {rel}")
+                  raise SystemExit(1)
+              print(f"  OK: interface asset exists -> {rel}")
 
-          # Check markdown files for broken relative links to local files
-          while IFS= read -r mdfile; do
-            # Extract markdown links like [text](path) excluding http/https/mailto
-            links=$(grep -oP '\[.*?\]\(\K[^)]+' "$mdfile" 2>/dev/null | grep -v '^http' | grep -v '^mailto' | grep -v '^#' | grep -v '^\!' || true)
-            for link in $links; do
-              # Remove any anchor fragments
-              clean_link=$(echo "$link" | sed 's/#.*//')
-              [ -z "$clean_link" ] && continue
-              # Resolve relative to the file's directory
-              file_dir=$(dirname "$mdfile")
-              target="$file_dir/$clean_link"
-              if [ ! -e "$target" ] && [ ! -e "$clean_link" ]; then
-                echo "  WARN: $mdfile has potentially broken link: $link"
-              fi
-            done
-          done < <(find . -name '*.md' -not -path './.git/*' -not -path '*/node_modules/*')
+          for rel in manifest.get("interface", {}).get("screenshots", []):
+              target = (root / rel).resolve()
+              if not target.exists():
+                  print(f"  FAIL: screenshot missing: {rel}")
+                  raise SystemExit(1)
+              print(f"  OK: screenshot exists -> {rel}")
+          PY
 
-          if [ "$errors" -gt 0 ]; then
-            echo "::error::$errors broken internal reference(s) found"
-            exit 1
-          fi
-          echo "Internal link check complete."
+          echo "Manifest reference check complete."
 
       - name: Summary
         if: always()
@@ -302,10 +245,9 @@ jobs:
           echo ""
           echo "Checks performed:"
           echo "  1. JSON syntax validation"
-          echo "  2. Hook script reference validation"
+          echo "  2. Codex hook script reference validation"
           echo "  3. Python hook syntax check"
           echo "  4. Bash hook syntax check"
-          echo "  5. Agent frontmatter validation (name, description, tools, model)"
+          echo "  5. Codex agent TOML + registration validation"
           echo "  6. Skill frontmatter validation (name, description)"
-          echo "  7. Command frontmatter validation (description)"
-          echo "  8. Internal link/reference check"
+          echo "  7. Codex plugin manifest reference validation"

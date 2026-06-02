@@ -36,6 +36,12 @@ SKIP_FILES = {
     "pnpm-lock.yaml",
 }
 
+# Documentation/prose extensions where credential-shaped strings are almost
+# always teaching examples (e.g. the security-patterns skill, sample reports),
+# not real secrets. Scanning them produces false positives that block
+# legitimate docs. Config/code (.json, .yml, .py, .js, ...) is still scanned.
+SKIP_EXTENSIONS = {".md", ".markdown", ".mdx", ".txt", ".rst"}
+
 
 def check_for_secrets(content, file_path):
     """Check content for potential secrets."""
@@ -43,6 +49,16 @@ def check_for_secrets(content, file_path):
 
     # Skip certain files
     if os.path.basename(file_path) in SKIP_FILES:
+        return issues
+
+    # Skip documentation/prose files — they carry intentional, illustrative
+    # credential examples rather than live secrets.
+    if os.path.splitext(file_path)[1].lower() in SKIP_EXTENSIONS:
+        return issues
+
+    # Skip example directories for the same reason.
+    path_lower = file_path.replace("\\", "/").lower()
+    if "/examples/" in path_lower or path_lower.startswith("examples/"):
         return issues
 
     # Skip test files checking for secret patterns
@@ -72,14 +88,18 @@ def main():
         issues = check_for_secrets(content, file_path)
 
         if issues:
-            print(f"🚫 BLOCKED - Security issue detected in {file_path}:")
+            # On exit code 2, Claude Code ignores stdout and feeds stderr back
+            # to the model as the block reason, so the explanation must go to
+            # stderr (see code.claude.com/docs/en/hooks).
+            print(f"🚫 BLOCKED - Security issue detected in {file_path}:", file=sys.stderr)
             for issue in issues:
-                print(f"  - {issue}")
-            print("\nThis edit has been BLOCKED to prevent committing secrets.")
+                print(f"  - {issue}", file=sys.stderr)
+            print("\nThis edit has been BLOCKED to prevent committing secrets.", file=sys.stderr)
             print(
-                "If this is a false positive, review and adjust the patterns in security-check.py"
+                "If this is a false positive, review and adjust the patterns in security-check.py",
+                file=sys.stderr,
             )
-            print("See security-patterns skill for secure credential management.")
+            print("See security-patterns skill for secure credential management.", file=sys.stderr)
             # Exit 2 to block the edit
             sys.exit(2)
 

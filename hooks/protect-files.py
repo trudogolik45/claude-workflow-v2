@@ -49,7 +49,11 @@ WARN_PATTERNS = [
 
 def matches_pattern(file_path, patterns):
     """Check if file matches any protected pattern."""
-    file_path = file_path.lstrip('./')
+    # Strip a single leading "./" prefix. Do NOT use lstrip('./') — it treats
+    # './' as a character set and would eat leading dots, turning ".env" into
+    # "env" and silently defeating dotfile protection.
+    if file_path.startswith('./'):
+        file_path = file_path[2:]
     for pattern in patterns:
         if fnmatch.fnmatch(file_path, pattern):
             return pattern
@@ -69,10 +73,16 @@ def main():
         blocked = matches_pattern(file_path, PROTECTED_PATTERNS)
         if blocked:
             reason = PROTECTED_REASONS.get(blocked, "This file is protected from edits")
-            print(f"BLOCKED: {file_path}")
-            print(f"   Matches protected pattern: {blocked}")
-            print(f"   Reason: {reason}")
-            print("   Use --force if this is intentional")
+            # Exit 2 blocks the tool call; Claude Code reads the reason from
+            # stderr and ignores stdout on exit 2.
+            print(f"BLOCKED: {file_path}", file=sys.stderr)
+            print(f"   Matches protected pattern: {blocked}", file=sys.stderr)
+            print(f"   Reason: {reason}", file=sys.stderr)
+            print(
+                "   Edit this file outside Claude Code, or adjust PROTECTED_PATTERNS "
+                "in protect-files.py if this is intentional.",
+                file=sys.stderr,
+            )
             sys.exit(2)  # Block the operation
         
         # Check for warning patterns
