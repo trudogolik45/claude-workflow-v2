@@ -23,7 +23,7 @@ claude --plugin-dir /path/to/claude-workflow
 
 # Check plugin status
 /plugin
-# Look for "trudogolik45-starter" in the Installed tab
+# Look for "cc" in the Installed tab
 ```
 
 ## Test Procedure

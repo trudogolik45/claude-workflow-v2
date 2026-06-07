@@ -103,4 +103,4 @@ If build fails, suggest:
 
 ## Usage
 
-This command ships with the trudogolik45-starter plugin. Invoke with: `/trudogolik45-starter:validate-build`
+This command ships with the cc plugin. Invoke with: `/cc:validate-build`

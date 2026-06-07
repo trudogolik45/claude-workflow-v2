@@ -18,7 +18,7 @@ How you are run determines whether you can spawn subagents:
 - **As the primary agent** (`claude --agent orchestrator`, or the main conversation): you can launch specialist subagents in parallel with the `Task` tool. The parallel workflow described below assumes this mode.
 - **Auto-delegated as a subagent**: Claude Code prevents nested delegation — a subagent cannot spawn other subagents, so the `Task` tool is unavailable. In this mode, coordinate and implement the work directly and sequentially in your own context; do not attempt to spawn subagents.
 
-For guaranteed parallel fan-out from any session, the `/trudogolik45-starter:parallel-review`, `/trudogolik45-starter:parallel-analyze`, and `/trudogolik45-starter:bootstrap-repo` commands run in the main thread and can always spawn subagents.
+For guaranteed parallel fan-out from any session, the `/cc:parallel-review`, `/cc:parallel-analyze`, and `/cc:bootstrap-repo` commands run in the main thread and can always spawn subagents.
 
 ## ACTION-FIRST RULE (Top Priority)
 

@@ -9,7 +9,7 @@
   },
   "plugins": [
     {
-      "name": "trudogolik45-starter",
+      "name": "cc",
       "source": "./",
       "description": "Universal Claude Code workflow with specialized agents, skills, hooks, and output styles for any software project. Includes orchestrator, code-reviewer, debugger, docs-writer, security-auditor, refactorer, and test-architect agents.",
       "version": "1.0.0",

@@ -63,9 +63,9 @@ Available commands:
 
 | Command              | What It Does                              |
 |---------------------|-------------------------------------------|
-| /trudogolik45-starter:commit         | Auto-generate conventional commit  |
-| /trudogolik45-starter:verify-changes | Multi-agent verification suite     |
-| /trudogolik45-starter:review         | Code review with structured output |
+| /cc:commit         | Auto-generate conventional commit  |
+| /cc:verify-changes | Multi-agent verification suite     |
+| /cc:review         | Code review with structured output |
 | ...                             | ...                               |
 
 Commands can be simple (commit) or complex (verify-changes spawns
@@ -75,7 +75,7 @@ Commands can be simple (commit) or complex (verify-changes spawns
 Read the `commit.md` command file and walk through how it works:
 
 ```
-Let's look at how /trudogolik45-starter:commit works:
+Let's look at how /cc:commit works:
 
 1. It gathers context: current branch, staged changes, recent commits
 2. It analyzes the diff to understand what changed
@@ -89,7 +89,7 @@ This restricts the command to only git operations -- it can't
 accidentally modify your files.
 ```
 
-**Try it**: Suggest staging a file and running `/trudogolik45-starter:commit`.
+**Try it**: Suggest staging a file and running `/cc:commit`.
 
 ## Step 3: Hooks That Protect Your Code
 
@@ -161,7 +161,7 @@ Based on your project ([language/framework]), here's what I'd
 recommend trying first:
 
 1. **[Most relevant command]** -- [why it's useful for their stack]
-   Run: /trudogolik45-starter:[command-name]
+   Run: /cc:[command-name]
 
 2. **[Most relevant agent]** -- [scenario where it helps]
    Just describe your task and it will activate automatically.
@@ -171,12 +171,12 @@ recommend trying first:
 
 Quick reference card:
 
-  /trudogolik45-starter:commit          -- commit with auto-message
-  /trudogolik45-starter:verify-changes  -- verify before pushing
-  /trudogolik45-starter:review          -- get a code review
-  /trudogolik45-starter:bootstrap-repo  -- generate full codebase docs
+  /cc:commit          -- commit with auto-message
+  /cc:verify-changes  -- verify before pushing
+  /cc:review          -- get a code review
+  /cc:bootstrap-repo  -- generate full codebase docs
 
-All available commands: /trudogolik45-starter:[tab] to see the list.
+All available commands: /cc:[tab] to see the list.
 ```
 
 ## Presentation Guidelines

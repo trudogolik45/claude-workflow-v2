@@ -1,4 +1,4 @@
-# trudogolik45-starter
+# cc
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-v1.0.33+-blue.svg)](https://code.claude.com)
@@ -55,7 +55,7 @@ for await (const message of query({
 
 ```bash
 # Install from marketplace (when available)
-claude plugin install trudogolik45-starter
+claude plugin install cc
 
 # Or install from local directory
 claude plugin install ./claude-workflow-v2
@@ -69,16 +69,16 @@ After loading the plugin, verify it's working:
 > /plugin
 ```
 
-Tab to **Installed** - you should see `trudogolik45-starter` listed.
+Tab to **Installed** - you should see `cc` listed.
 Tab to **Errors** - should be empty (no errors).
 
 These commands become available:
 
 ```
-/trudogolik45-starter:architect    # Architecture-first mode
-/trudogolik45-starter:rapid        # Ship fast mode
-/trudogolik45-starter:commit       # Auto-generate commit message
-/trudogolik45-starter:verify-changes  # Multi-agent verification
+/cc:architect    # Architecture-first mode
+/cc:rapid        # Ship fast mode
+/cc:commit       # Auto-generate commit message
+/cc:verify-changes  # Multi-agent verification
 ```
 
 ---
@@ -101,7 +101,7 @@ These commands become available:
 **Auto-commit your changes:**
 
 ```
-> /trudogolik45-starter:commit
+> /cc:commit
 
 Looking at staged changes...
 ✓ Created commit: feat(auth): add JWT refresh token endpoint
@@ -110,7 +110,7 @@ Looking at staged changes...
 **Full git workflow:**
 
 ```
-> /trudogolik45-starter:commit-push-pr
+> /cc:commit-push-pr
 
 ✓ Committed: feat: add user dashboard
 ✓ Pushed to origin/feature/dashboard
@@ -120,7 +120,7 @@ Looking at staged changes...
 **Verify before shipping:**
 
 ```
-> /trudogolik45-starter:verify-changes
+> /cc:verify-changes
 
 Spawning verification agents...
 ├─ build-validator: ✓ Build passes
@@ -220,63 +220,63 @@ Hooks run automatically on events:
 
 ## Commands Reference
 
-All commands use the format `/trudogolik45-starter:<command>`.
+All commands use the format `/cc:<command>`.
 
 ### Output Styles
 
 | Command                      | Mode                                          |
 | ---------------------------- | --------------------------------------------- |
-| `/trudogolik45-starter:architect` | System design mode - architecture before code |
-| `/trudogolik45-starter:rapid`     | Fast development - ship quickly, iterate      |
-| `/trudogolik45-starter:mentor`    | Teaching mode - explain the "why"             |
-| `/trudogolik45-starter:review`    | Code review mode - strict quality             |
+| `/cc:architect` | System design mode - architecture before code |
+| `/cc:rapid`     | Fast development - ship quickly, iterate      |
+| `/cc:mentor`    | Teaching mode - explain the "why"             |
+| `/cc:review`    | Code review mode - strict quality             |
 
 ### Git Workflow (Inner-Loop)
 
 | Command                              | Purpose                                   |
 | ------------------------------------ | ----------------------------------------- |
-| `/trudogolik45-starter:commit`            | Auto-generate conventional commit message |
-| `/trudogolik45-starter:commit-push-pr`    | Commit → Push → Create PR (full workflow) |
-| `/trudogolik45-starter:quick-fix`         | Fast fix for lint/type errors             |
-| `/trudogolik45-starter:add-tests`         | Generate tests for recent changes         |
-| `/trudogolik45-starter:lint-fix`          | Auto-fix all linting issues               |
-| `/trudogolik45-starter:sync-branch`       | Sync with main (rebase or merge)          |
-| `/trudogolik45-starter:summarize-changes` | Generate standup/PR summaries             |
+| `/cc:commit`            | Auto-generate conventional commit message |
+| `/cc:commit-push-pr`    | Commit → Push → Create PR (full workflow) |
+| `/cc:quick-fix`         | Fast fix for lint/type errors             |
+| `/cc:add-tests`         | Generate tests for recent changes         |
+| `/cc:lint-fix`          | Auto-fix all linting issues               |
+| `/cc:sync-branch`       | Sync with main (rebase or merge)          |
+| `/cc:summarize-changes` | Generate standup/PR summaries             |
 
 ### Verification
 
 | Command                            | Purpose                                 |
 | ---------------------------------- | --------------------------------------- |
-| `/trudogolik45-starter:verify-changes`  | Multi-subagent adversarial verification |
-| `/trudogolik45-starter:validate-build`  | Build process validation                |
-| `/trudogolik45-starter:run-tests`       | Tiered test execution                   |
-| `/trudogolik45-starter:lint-check`      | Code quality checks                     |
-| `/trudogolik45-starter:security-scan`   | Security vulnerability detection        |
-| `/trudogolik45-starter:code-simplifier` | Post-implementation cleanup             |
+| `/cc:verify-changes`  | Multi-subagent adversarial verification |
+| `/cc:validate-build`  | Build process validation                |
+| `/cc:run-tests`       | Tiered test execution                   |
+| `/cc:lint-check`      | Code quality checks                     |
+| `/cc:security-scan`   | Security vulnerability detection        |
+| `/cc:code-simplifier` | Post-implementation cleanup             |
 
 ### Parallel
 
 | Command                             | Purpose                                  |
 | ----------------------------------- | ---------------------------------------- |
-| `/trudogolik45-starter:parallel-review`  | Review multiple files/dirs via subagents |
-| `/trudogolik45-starter:parallel-analyze` | Multi-perspective analysis via subagents |
+| `/cc:parallel-review`  | Review multiple files/dirs via subagents |
+| `/cc:parallel-analyze` | Multi-perspective analysis via subagents |
 
 ### Planning & Refactoring
 
 | Command                               | Purpose                                    |
 | ------------------------------------- | ------------------------------------------ |
-| `/trudogolik45-starter:plan`               | Persistent PLAN.md with phase tracking     |
-| `/trudogolik45-starter:refactor-guided`    | 4-phase systematic refactoring with safety |
-| `/trudogolik45-starter:dependency-upgrade` | Safe dependency upgrades with rollback     |
+| `/cc:plan`               | Persistent PLAN.md with phase tracking     |
+| `/cc:refactor-guided`    | 4-phase systematic refactoring with safety |
+| `/cc:dependency-upgrade` | Safe dependency upgrades with rollback     |
 
 ### Onboarding & Knowledge
 
 | Command                                   | Purpose                                   |
 | ----------------------------------------- | ----------------------------------------- |
-| `/trudogolik45-starter:tutorial`               | Interactive guided tutorial for new users |
-| `/trudogolik45-starter:bootstrap-repo`         | 10-agent parallel repo exploration        |
-| `/trudogolik45-starter:save-session-learnings` | Persist session discoveries to docs       |
-| `/trudogolik45-starter:metrics`                | View agent performance metrics            |
+| `/cc:tutorial`               | Interactive guided tutorial for new users |
+| `/cc:bootstrap-repo`         | 10-agent parallel repo exploration        |
+| `/cc:save-session-learnings` | Persist session discoveries to docs       |
+| `/cc:metrics`                | View agent performance metrics            |
 
 ---
 

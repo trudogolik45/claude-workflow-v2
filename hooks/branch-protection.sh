@@ -30,7 +30,7 @@ for BRANCH in "${PROTECTED_BRANCHES[@]}"; do
     if [[ "$CURRENT_BRANCH" == "$BRANCH" ]]; then
         echo "WARNING: You are on protected branch '$CURRENT_BRANCH'."
         echo "  Create a feature branch: git checkout -b feature/your-change"
-        echo "  Or use: /trudogolik45-starter:sync-branch to manage branches"
+        echo "  Or use: /cc:sync-branch to manage branches"
         exit 0
     fi
 done

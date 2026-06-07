@@ -13,8 +13,8 @@ Initial release of this personal fork, rebranded from
 
 ### Changed
 
-- Renamed the plugin to `trudogolik45-starter`; all slash commands now use the
-  `/trudogolik45-starter:<command>` namespace.
+- Renamed the plugin to `cc`; all slash commands now use the
+  `/cc:<command>` namespace.
 - Rebranded author, repository, and homepage metadata to `trudogolik45`.
 
 ### Removed

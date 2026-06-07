@@ -191,9 +191,9 @@ The plugin provides these parallel execution commands:
 
 | Command | Purpose |
 |---------|---------|
-| `/trudogolik45-starter:parallel-review` | Review multiple directories in parallel |
-| `/trudogolik45-starter:parallel-analyze` | Multi-perspective analysis |
-| `/trudogolik45-starter:verify-changes` | Parallel verification checks |
+| `/cc:parallel-review` | Review multiple directories in parallel |
+| `/cc:parallel-analyze` | Multi-perspective analysis |
+| `/cc:verify-changes` | Parallel verification checks |
 
 ## When to Use Parallel Execution
 

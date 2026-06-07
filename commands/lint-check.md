@@ -136,4 +136,4 @@ cargo fmt
 
 ## Usage
 
-This command ships with the trudogolik45-starter plugin. Invoke with: `/trudogolik45-starter:lint-check`
+This command ships with the cc plugin. Invoke with: `/cc:lint-check`

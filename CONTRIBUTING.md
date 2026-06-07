@@ -1,4 +1,4 @@
-# Contributing to trudogolik45-starter
+# Contributing to cc
 
 Thank you for your interest in contributing to the Claude Code workflow plugin! This document provides guidelines for contributing.
 
