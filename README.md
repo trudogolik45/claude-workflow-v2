@@ -1,541 +1,172 @@
 # cc
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Claude Code](https://img.shields.io/badge/Claude%20Code-v1.0.33+-blue.svg)](https://code.claude.com)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/trudogolik45/claude-workflow-v2/pulls)
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-v2.1+-blue.svg)](https://code.claude.com)
 
-A universal Claude Code workflow plugin with specialized agents, skills, hooks, and output styles for any software project. Compatible with [skills.sh](https://skills.sh) — works with Claude Code, Cursor, Codex, and 35+ AI agents.
+A lean, personal Claude Code workflow plugin — specialized agents, a curated set of
+multi-agent slash commands, on-demand knowledge skills, and a branch-protection guardrail.
+Forked and trimmed from [CloudAI-X/claude-workflow-v2](https://github.com/CloudAI-X/claude-workflow-v2).
+
+> Slash commands are namespaced by the plugin name, so every command is `/cc:<command>`.
 
 ---
 
-## Quick Start
+## Install
 
-### Option 1: skills.sh (Recommended — Any Agent)
-
-```bash
-npx skills add trudogolik45/claude-workflow-v2
-```
-
-Installs skills to Claude Code, Cursor, Codex, Windsurf, Cline, and 35+ other AI agents automatically.
-
-### Option 2: npx (Claude Code — Full Plugin)
+This repo is its own marketplace. Install it locally:
 
 ```bash
-npx install-claude-workflow-v2@latest
+# Register this directory as a marketplace, then install the plugin
+claude plugin marketplace add /path/to/claude-workflow-v2
+claude plugin install cc@claude-workflow --scope user
 ```
 
-Installs the complete plugin: agents, commands, skills, and hooks.
-
-### Option 3: CLI (Per-Session)
+Or run a session against it without installing:
 
 ```bash
-# Clone the plugin
-git clone https://github.com/trudogolik45/claude-workflow-v2.git
-
-# Run Claude Code with the plugin
-claude --plugin-dir ./claude-workflow-v2
+claude --plugin-dir /path/to/claude-workflow-v2
 ```
 
-### Option 4: Agent SDK
-
-```typescript
-import { query } from "@anthropic-ai/claude-agent-sdk";
-
-for await (const message of query({
-  prompt: "Hello",
-  options: {
-    plugins: [{ type: "local", path: "./claude-workflow-v2" }],
-  },
-})) {
-  // Plugin commands, agents, and skills are now available
-}
-```
-
-### Option 5: Install Permanently
-
-```bash
-# Install from marketplace (when available)
-claude plugin install cc
-
-# Or install from local directory
-claude plugin install ./claude-workflow-v2
-```
-
-### Verify Installation
-
-After loading the plugin, verify it's working:
-
-```
-> /plugin
-```
-
-Tab to **Installed** - you should see `cc` listed.
-Tab to **Errors** - should be empty (no errors).
-
-These commands become available:
-
-```
-/cc:architect    # Architecture-first mode
-/cc:rapid        # Ship fast mode
-/cc:commit       # Auto-generate commit message
-/cc:verify-changes  # Multi-agent verification
-```
+Verify with `/plugin` → **Installed** should list `cc`. After install, run `/reload-plugins`
+(or restart) so the `/cc:` commands appear.
 
 ---
 
 ## What's Included
 
-| Component    | Count | Description                                                             |
-| ------------ | ----- | ----------------------------------------------------------------------- |
-| **Agents**   | 7     | Specialized subagents for code review, debugging, security, etc.        |
-| **Commands** | 26    | Slash commands for workflows, output styles, planning, and onboarding   |
-| **Skills**   | 12    | Knowledge domains with on-demand context loading                        |
-| **Hooks**    | 11    | Automation scripts for formatting, security, metrics, and notifications |
+| Component    | Count | Notes                                                                       |
+| ------------ | ----- | --------------------------------------------------------------------------- |
+| **Agents**   | 7     | orchestrator + code-reviewer, debugger, docs-writer, security-auditor, refactorer, test-architect |
+| **Commands** | 7     | multi-agent fan-out, planning, and onboarding (`/cc:<command>`)             |
+| **Skills**   | 9     | on-demand knowledge domains (auto-load on topic match)                      |
+| **Hooks**    | 1     | `branch-protection` wired; other guardrail scripts ship dormant in `hooks/` |
+
+Always-on context cost: **~1,900 tokens/session** (component descriptions).
 
 ---
 
-## Usage Examples
+## Commands
 
-### Commands in Action
+All commands are invoked as `/cc:<command>`.
 
-**Auto-commit your changes:**
-
-```
-> /cc:commit
-
-Looking at staged changes...
-✓ Created commit: feat(auth): add JWT refresh token endpoint
-```
-
-**Full git workflow:**
-
-```
-> /cc:commit-push-pr
-
-✓ Committed: feat: add user dashboard
-✓ Pushed to origin/feature/dashboard
-✓ Created PR #42: https://github.com/you/repo/pull/42
-```
-
-**Verify before shipping:**
-
-```
-> /cc:verify-changes
-
-Spawning verification agents...
-├─ build-validator: ✓ Build passes
-├─ test-runner: ✓ 42 tests pass
-├─ lint-checker: ⚠ 2 warnings (non-blocking)
-└─ security-scanner: ✓ No vulnerabilities
-
-Ready to ship!
-```
-
-### Agents in Action
-
-Agents spawn automatically based on your request:
-
-**You say:** "The login is broken, users get 401 errors"
-
-```
-[debugger agent activated]
-→ Checking auth middleware... found issue
-→ Token validation uses wrong secret in production
-→ Fix: Update AUTH_SECRET in .env.production
-```
-
-**You say:** "Review my changes"
-
-```
-[code-reviewer agent activated]
-→ Analyzing 3 files changed...
-✓ Logic is correct
-⚠ Missing null check on line 42
-⚠ Consider adding rate limiting to this endpoint
-```
-
-**You say:** "Add authentication to the API"
-
-```
-[orchestrator agent activated]
-→ Breaking down into subtasks:
-  1. Design auth schema (spawning architect)
-  2. Implement JWT middleware
-  3. Add login/register endpoints
-  4. Write tests (spawning test-architect)
-  5. Update API docs (spawning docs-writer)
-```
-
-### Skills in Action
-
-Skills provide domain knowledge automatically:
-
-**You ask:** "How should I structure the payment service?"
-
-```
-[designing-architecture skill applied]
-→ Recommending hexagonal architecture
-→ Payment providers as adapters
-→ Core domain isolated from infrastructure
-```
-
-**You ask:** "Make this endpoint faster"
-
-```
-[optimizing-performance skill applied]
-→ Adding database indexes
-→ Implementing response caching
-→ Using pagination for large results
-```
-
-### Hooks in Action
-
-Hooks run automatically on events:
-
-**Security block (pre-edit):**
-
-```
-⛔ BLOCKED: Potential secret detected
-   File: src/config.ts, Line 5
-   Pattern: API key (sk-...)
-
-   Remove the secret and use environment variables.
-```
-
-**Auto-format (post-edit):**
-
-```
-✓ Formatted with prettier: src/components/Button.tsx
-✓ Formatted with black: scripts/deploy.py
-```
-
-**Desktop notifications:**
-
-```
-🔔 "Claude needs input" - when waiting for your response
-🔔 "Task complete" - when finished
-```
-
----
-
-## Commands Reference
-
-All commands use the format `/cc:<command>`.
-
-### Output Styles
-
-| Command                      | Mode                                          |
-| ---------------------------- | --------------------------------------------- |
-| `/cc:architect` | System design mode - architecture before code |
-| `/cc:rapid`     | Fast development - ship quickly, iterate      |
-| `/cc:mentor`    | Teaching mode - explain the "why"             |
-| `/cc:review`    | Code review mode - strict quality             |
-
-### Git Workflow (Inner-Loop)
-
-| Command                              | Purpose                                   |
-| ------------------------------------ | ----------------------------------------- |
-| `/cc:commit`            | Auto-generate conventional commit message |
-| `/cc:commit-push-pr`    | Commit → Push → Create PR (full workflow) |
-| `/cc:quick-fix`         | Fast fix for lint/type errors             |
-| `/cc:add-tests`         | Generate tests for recent changes         |
-| `/cc:lint-fix`          | Auto-fix all linting issues               |
-| `/cc:sync-branch`       | Sync with main (rebase or merge)          |
-| `/cc:summarize-changes` | Generate standup/PR summaries             |
-
-### Verification
-
-| Command                            | Purpose                                 |
-| ---------------------------------- | --------------------------------------- |
-| `/cc:verify-changes`  | Multi-subagent adversarial verification |
-| `/cc:validate-build`  | Build process validation                |
-| `/cc:run-tests`       | Tiered test execution                   |
-| `/cc:lint-check`      | Code quality checks                     |
-| `/cc:security-scan`   | Security vulnerability detection        |
-| `/cc:code-simplifier` | Post-implementation cleanup             |
-
-### Parallel
-
-| Command                             | Purpose                                  |
-| ----------------------------------- | ---------------------------------------- |
-| `/cc:parallel-review`  | Review multiple files/dirs via subagents |
-| `/cc:parallel-analyze` | Multi-perspective analysis via subagents |
-
-### Planning & Refactoring
-
-| Command                               | Purpose                                    |
-| ------------------------------------- | ------------------------------------------ |
-| `/cc:plan`               | Persistent PLAN.md with phase tracking     |
-| `/cc:refactor-guided`    | 4-phase systematic refactoring with safety |
-| `/cc:dependency-upgrade` | Safe dependency upgrades with rollback     |
-
-### Onboarding & Knowledge
-
-| Command                                   | Purpose                                   |
-| ----------------------------------------- | ----------------------------------------- |
-| `/cc:tutorial`               | Interactive guided tutorial for new users |
-| `/cc:bootstrap-repo`         | 10-agent parallel repo exploration        |
-| `/cc:save-session-learnings` | Persist session discoveries to docs       |
-| `/cc:metrics`                | View agent performance metrics            |
+| Command                  | Purpose                                                       |
+| ------------------------ | ------------------------------------------------------------ |
+| `/cc:verify-changes`     | Multi-subagent adversarial verification of recent changes    |
+| `/cc:parallel-review`    | Review multiple files/dirs in parallel via subagents         |
+| `/cc:parallel-analyze`   | Multi-perspective analysis (arch/security/perf/testing)      |
+| `/cc:security-scan`      | Security vulnerability scan                                  |
+| `/cc:bootstrap-repo`     | 10-agent parallel exploration → generates `CODEBASE.md`      |
+| `/cc:plan`               | Persistent `PLAN.md` with phases and progress tracking       |
+| `/cc:refactor-guided`    | 4-phase systematic refactoring with safety rules            |
 
 ---
 
 ## Agents
 
-Agents are specialized subagents that Claude spawns automatically based on your task.
+Claude spawns these automatically based on your task (the orchestrator can fan them out in parallel).
 
-| Agent              | Purpose                          | Auto-Triggers                                                |
+| Agent              | Purpose                          | Auto-triggers                                                |
 | ------------------ | -------------------------------- | ------------------------------------------------------------ |
-| `orchestrator`     | Coordinate multi-step tasks      | "improve", "enhance", "build", "architecture", complex tasks |
-| `code-reviewer`    | Review code quality              | "review", "PR review", "lint", code changes                  |
-| `debugger`         | Systematic bug investigation     | Errors, crashes, memory leaks, timeouts, race conditions     |
-| `docs-writer`      | Technical documentation          | README, changelogs, migration guides, release notes          |
-| `security-auditor` | Security vulnerability detection | Auth, encryption, secrets, OAuth, JWT, CORS                  |
-| `refactorer`       | Code structure improvements      | Tech debt, code smells, complexity reduction                 |
-| `test-architect`   | Design test strategies           | Test plans, mocking, flaky tests, integration/E2E            |
+| `orchestrator`     | Coordinate multi-step tasks      | "improve", "build", "architecture", complex multi-part tasks |
+| `code-reviewer`    | Review code quality (read-only)  | "review", "PR review", code changes                          |
+| `debugger`         | Systematic bug investigation     | errors, crashes, leaks, timeouts, race conditions            |
+| `docs-writer`      | Technical documentation          | README, changelogs, migration guides                         |
+| `security-auditor` | Vulnerability detection (read-only) | auth, encryption, secrets, OAuth, JWT, CORS               |
+| `refactorer`       | Behavior-preserving restructuring | tech debt, code smells, complexity reduction                |
+| `test-architect`   | Test strategy & test writing     | test plans, mocking, flaky tests, integration/E2E            |
 
 ---
 
 ## Skills
 
-Skills are knowledge domains that Claude uses autonomously when relevant.
+Knowledge domains Claude loads autonomously when a task matches their description.
 
-| Skill                         | Domain                                                |
-| ----------------------------- | ----------------------------------------------------- |
-| `analyzing-projects`          | Understand codebase structure and patterns            |
-| `designing-tests`             | Unit, integration, E2E test approaches                |
-| `designing-architecture`      | Clean Architecture, Hexagonal, etc.                   |
-| `optimizing-performance`      | Speed up applications, identify bottlenecks           |
-| `managing-git`                | Version control, conventional commits                 |
-| `designing-apis`              | REST/GraphQL patterns and best practices              |
-| `parallel-execution`          | Multi-subagent parallel task execution patterns       |
-| `web-design-guidelines`       | Self-contained UI audit (A11Y, PERF, RD, SEC, I18N)   |
-| `database-design`             | Schema design, indexing, query optimization           |
-| `devops-infrastructure`       | Docker, CI/CD, deployment, IaC, monitoring            |
-| `error-handling`              | Error patterns, structured logging, retry/circuit     |
-| `security-patterns`           | Auth, RBAC, secrets, CORS, rate limiting, headers     |
+| Skill                     | Domain                                                |
+| ------------------------- | ----------------------------------------------------- |
+| `analyzing-projects`      | Map an unfamiliar codebase (tech-stack & infra detection) |
+| `database-design`         | Schema, indexing, query tuning, migrations, pooling   |
+| `designing-architecture`  | Pattern selection (Clean, Hexagonal, CQRS, Event-Driven) |
+| `devops-infrastructure`   | Docker, CI/CD, deployment, IaC, observability         |
+| `error-handling`          | Circuit breakers, correlation IDs, structured logging |
+| `managing-git`            | Conventional commits, rescue ops, advanced git        |
+| `parallel-execution`      | Multi-subagent fan-out patterns (Task tool)           |
+| `security-patterns`       | Auth/RBAC/encryption/secrets/rate-limit implementation |
+| `web-design-guidelines`   | ARIA, Core Web Vitals, CSS-engineering UI audit       |
 
 ---
 
 ## Hooks
 
-Hooks run automatically on specific events.
+The plugin wires a single guardrail by default:
 
-| Hook                  | Trigger       | Action                                  |
-| --------------------- | ------------- | --------------------------------------- |
-| Security scan         | Edit/Write    | Blocks commits with potential secrets   |
-| File protection       | Edit/Write    | Blocks edits to lock files, .env, .git  |
-| Auto-format           | Edit/Write    | Runs prettier/black/gofmt by file type  |
-| TypeScript check      | Edit/Write    | Runs `tsc --noEmit` on .ts/.tsx files   |
-| Pre-commit check      | Bash          | Detects debug statements & temp markers |
-| Branch protection     | Bash          | Warns on commits to protected branches  |
-| Command logging       | Bash          | Logs to `.claude/command-history.log`   |
-| Environment check     | Session start | Validates Node.js, Python, Git          |
-| Prompt analysis       | User prompt   | Suggests appropriate agents             |
-| Auto-verify           | Task complete | Runs tests/lint, reports results        |
-| Doc update suggest    | Task complete | Suggests CLAUDE.md updates for changes  |
-| Session metrics       | Task complete | Logs session telemetry to metrics file  |
-| Input notification    | Input needed  | Desktop notification                    |
-| Complete notification | Task complete | Desktop notification                    |
+| Hook                | Trigger      | Action                                  |
+| ------------------- | ------------ | --------------------------------------- |
+| `branch-protection` | PreToolUse(Bash) | Warns on commits/pushes to protected branches |
+
+Additional hardened guardrail scripts ship dormant under `hooks/` (`protect-files.py`,
+`security-check.py`, `pre-commit-check.py`, `format-on-edit.py`, …). Wire any of them by
+adding an entry to `hooks/hooks.json`.
 
 ---
 
 ## Examples
 
-For detailed multi-agent orchestration examples, see the [examples/](./examples/) directory:
+See [examples/](./examples/) for worked multi-agent orchestration walkthroughs:
 
-| Example                                                                          | Description                                            |
-| -------------------------------------------------------------------------------- | ------------------------------------------------------ |
-| [Comprehensive Code Review](./examples/orchestration/comprehensive-code-review/) | 6-agent sequential workflow for thorough code analysis |
-| [Parallel Execution](./examples/orchestration/parallel-execution/)               | Fan-out multi-subagent workflow for independent tasks  |
-
-Each example includes:
-
-- **README.md** - Overview and quick start
-- **workflow.md** - Exact prompts to use
-- **verification.md** - How to verify it works
-- **sample-outputs/** - Example agent outputs
+| Example | Description |
+| --- | --- |
+| [Comprehensive Code Review](./examples/orchestration/comprehensive-code-review/) | Multi-agent workflow for thorough code analysis |
+| [Parallel Execution](./examples/orchestration/parallel-execution/) | Fan-out multi-subagent workflow for independent tasks |
 
 ---
 
-## Configuration
+## Configuration templates
 
-### Add Permissions to Your Project
-
-Copy the permissions template to your project:
+Copy-paste starters live in [templates/](./templates/):
 
 ```bash
-mkdir -p /path/to/your/project/.claude
-cp templates/settings.local.json.template /path/to/your/project/.claude/settings.local.json
+cp templates/settings.local.json.template /path/to/project/.claude/settings.local.json
+cp templates/CLAUDE.md.template          /path/to/project/CLAUDE.md
+cp templates/mcp.json.template           /path/to/project/.mcp.json
 ```
 
-This pre-allows common safe commands so you don't get prompted every time.
-
-### Add Team Conventions
-
-Copy the CLAUDE.md template to your project root:
-
-```bash
-cp templates/CLAUDE.md.template /path/to/your/project/CLAUDE.md
-```
-
-Then customize with your:
-
-- Package manager commands
-- Test/build/lint commands
-- Code conventions
-- Architecture decisions
-
-### MCP Servers
-
-Copy the MCP template to enable integrations like Slack, GitHub, Sentry:
-
-```bash
-cp templates/mcp.json.template /path/to/your/project/.mcp.json
-```
-
-Then configure the environment variables for the servers you want to use.
-
-### GitHub Action (@.claude in PRs)
-
-Enable Claude to respond to PR comments by installing the GitHub Action:
-
-```bash
-# In your repository
-claude /install-github-action
-```
-
-This enables:
-
-- Tag `@claude` in PR comments to get code suggestions
-- Auto-update `CLAUDE.md` during code review
-- Claude responds to review feedback automatically
-
-**Example PR comment:**
-
-```
-@claude please add input validation to the email field
-```
-
-**Team workflow tip:** Use `@claude` to update your `CLAUDE.md` with learnings from code review:
-
-```
-@claude add a note to CLAUDE.md that we should always validate email format before API calls
-```
+`CLAUDE.md.template` ships with the personal git/PR conventions (one-commit-per-file,
+small PRs, squash-merge) pre-populated.
 
 ---
 
-## Extending the Plugin
+## Extending
 
-### Add Custom Commands
+Add components by dropping files into the plugin:
 
-Create `.md` files in `commands/`:
-
-```markdown
----
-allowed-tools: Bash(git:*), Read, Write
-description: What this command does
-argument-hint: [optional arguments]
----
-
-[Command instructions here]
-```
-
-### Add Custom Agents
-
-Create `.md` files in `agents/`:
-
-```markdown
----
-name: my-agent
-description: What it does. Use PROACTIVELY when [triggers].
-tools: Read, Write, Edit, Bash
-model: sonnet
----
-
-[Agent instructions here]
-```
-
-### Add Custom Skills
-
-Create subdirectories in `skills/` with a `SKILL.md` file:
-
-```markdown
----
-name: my-skill
-description: Guides [domain]. Use when [triggers].
----
-
-[Skill knowledge and patterns here]
-```
+- **Commands** — `commands/<name>.md` with `description` (and optional `allowed-tools`) frontmatter → `/cc:<name>`.
+- **Agents** — `agents/<name>.md` with `name`, `description`, `tools`, `model` frontmatter.
+- **Skills** — `skills/<name>/SKILL.md` with `name` + `description` frontmatter.
 
 ---
 
-## Plugin Structure
+## Plugin structure
 
 ```
-claude-workflow/
+claude-workflow-v2/
 ├── .claude-plugin/
-│   ├── plugin.json           # Required: Plugin manifest
-│   └── marketplace.json      # Optional: Marketplace metadata
+│   ├── plugin.json           # Identity (name "cc" → /cc: namespace)
+│   └── marketplace.json      # Marketplace + skill list
 ├── agents/                   # 7 specialized agents
-│   ├── orchestrator.md
-│   ├── code-reviewer.md
-│   ├── debugger.md
-│   ├── docs-writer.md
-│   ├── security-auditor.md
-│   ├── refactorer.md
-│   └── test-architect.md
-├── commands/                 # 26 slash commands
-│   ├── architect.md          # Output styles
-│   ├── rapid.md
-│   ├── mentor.md
-│   ├── review.md
-│   ├── commit.md             # Git workflow
-│   ├── commit-push-pr.md
-│   ├── quick-fix.md
-│   ├── add-tests.md
-│   ├── lint-fix.md
-│   ├── sync-branch.md
-│   ├── summarize-changes.md
-│   ├── verify-changes.md     # Verification
-│   ├── validate-build.md
-│   ├── run-tests.md
-│   ├── lint-check.md
-│   ├── security-scan.md
-│   ├── code-simplifier.md
-│   ├── parallel-review.md    # Parallel
+├── commands/                 # 7 slash commands
+│   ├── verify-changes.md
+│   ├── parallel-review.md
 │   ├── parallel-analyze.md
-│   ├── plan.md               # Planning & refactoring
-│   ├── refactor-guided.md
-│   ├── dependency-upgrade.md
-│   ├── tutorial.md           # Onboarding & knowledge
+│   ├── security-scan.md
 │   ├── bootstrap-repo.md
-│   ├── save-session-learnings.md
-│   └── metrics.md
-├── skills/                   # 12 knowledge domains
-│   ├── analyzing-projects/
-│   ├── database-design/
-│   ├── designing-apis/
-│   ├── designing-architecture/
-│   ├── designing-tests/
-│   ├── devops-infrastructure/
-│   ├── error-handling/
-│   ├── managing-git/
-│   ├── optimizing-performance/
-│   ├── parallel-execution/
-│   ├── security-patterns/
-│   └── web-design-guidelines/
+│   ├── plan.md
+│   └── refactor-guided.md
+├── skills/                   # 9 knowledge domains
 ├── hooks/
-│   ├── hooks.json            # Hook configuration
-│   └── 11 automation scripts # Pre/post tool, session, metrics, notifications
+│   ├── hooks.json            # Wires branch-protection only
+│   └── *.py / *.sh           # branch-protection active; others dormant
 ├── templates/                # User-copyable templates
-│   ├── CLAUDE.md.template
-│   ├── settings.json.template
-│   ├── settings.local.json.template
-│   ├── mcp.json.template
-│   ├── mcp-servers-template.md
-│   └── README.md
+├── examples/                 # Orchestration walkthroughs
 ├── CLAUDE.md                 # Plugin development guidelines
 └── README.md
 ```
@@ -544,51 +175,18 @@ claude-workflow/
 
 ## Requirements
 
-- **Claude Code** v1.0.33 or later
+- **Claude Code** v2.1 or later
 - **Python 3** (for hook scripts)
-- **Node.js** (optional, for npm commands)
-- **Git** (for version control features)
+- **Git**
 
 ---
-
-## Multi-Agent Compatibility (skills.sh)
-
-This repo is fully compatible with [skills.sh](https://skills.sh) — the universal agent skills platform. Our 12 skills work with **38+ AI coding agents**:
-
-| Agent           | Install Method                                                       |
-| --------------- | -------------------------------------------------------------------- |
-| **Claude Code** | `npx skills add trudogolik45/claude-workflow-v2` or full plugin install |
-| **Cursor**      | `npx skills add trudogolik45/claude-workflow-v2`                        |
-| **Codex**       | `npx skills add trudogolik45/claude-workflow-v2`                        |
-| **Windsurf**    | `npx skills add trudogolik45/claude-workflow-v2`                        |
-| **Cline**       | `npx skills add trudogolik45/claude-workflow-v2`                        |
-| **35+ more**    | `npx skills add trudogolik45/claude-workflow-v2`                        |
-
-> **Note:** `npx skills add` installs **skills only**. For the full Claude Code experience (agents, commands, hooks), use `npx install-claude-workflow-v2@latest`.
-
----
-
-## Contributing
-
-Contributions welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md).
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
----
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=trudogolik45/claude-workflow-v2&type=date&legend=top-left)](https://www.star-history.com/#trudogolik45/claude-workflow-v2&type=date&legend=top-left)
 
 ## Credits
 
-- Plugin created by [@cloudxdev](https://x.com/cloudxdev)
-- Workflow patterns inspired by [Boris Cherny](https://x.com/bcherny) (creator of Claude Code)
+Forked from [CloudAI-X/claude-workflow-v2](https://github.com/CloudAI-X/claude-workflow-v2)
+(original plugin by [@cloudxdev](https://x.com/cloudxdev)). Workflow patterns inspired by
+[Boris Cherny](https://x.com/bcherny). MIT — see [LICENSE](./LICENSE); the upstream copyright is retained.
 
 ## License
 
-MIT - see [LICENSE](./LICENSE) for details.
+MIT — see [LICENSE](./LICENSE) for details.
