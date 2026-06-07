@@ -1,4 +1,4 @@
-# Contributing to project-starter
+# Contributing to trudogolik45-starter
 
 Thank you for your interest in contributing to the Claude Code workflow plugin! This document provides guidelines for contributing.
 
@@ -6,7 +6,7 @@ Thank you for your interest in contributing to the Claude Code workflow plugin! 
 
 ### Reporting Bugs
 
-1. Check if the bug has already been reported in [Issues](https://github.com/CloudAI-X/claude-workflow-v2/issues)
+1. Check if the bug has already been reported in [Issues](https://github.com/trudogolik45/claude-workflow-v2/issues)
 2. If not, create a new issue using the bug report template
 3. Include:
    - Claude Code version (`claude --version`)
@@ -17,7 +17,7 @@ Thank you for your interest in contributing to the Claude Code workflow plugin! 
 
 ### Suggesting Features
 
-1. Check existing [Issues](https://github.com/CloudAI-X/claude-workflow-v2/issues) for similar suggestions
+1. Check existing [Issues](https://github.com/trudogolik45/claude-workflow-v2/issues) for similar suggestions
 2. Create a new issue using the feature request template
 3. Describe the use case and expected behavior
 
@@ -133,4 +133,4 @@ Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## Questions?
 
-Open a [Discussion](https://github.com/CloudAI-X/claude-workflow-v2/discussions) or reach out via Issues.
+Open a [Discussion](https://github.com/trudogolik45/claude-workflow-v2/discussions) or reach out via Issues.

@@ -180,7 +180,7 @@ separate retrieval step. Read each analysis as it returns.
 ## Example Usage
 
 ```
-/project-starter:parallel-analyze src/api
+/trudogolik45-starter:parallel-analyze src/api
 ```
 
 This spawns 4 parallel analysts (architecture, security, performance, testing), completing in ~1/4 the time of sequential analysis.

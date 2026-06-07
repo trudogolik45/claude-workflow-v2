@@ -46,8 +46,10 @@ def get_files_changed() -> int:
 
 
 def get_latest_commit() -> str:
-    """Get the latest commit message from git log --oneline -1."""
-    success, output = run_command(["git", "log", "--oneline", "-1"])
+    """Get the latest commit SHA only. The commit *message* is intentionally
+    omitted so a secret accidentally pasted into a commit message is never
+    persisted to the metrics log."""
+    success, output = run_command(["git", "rev-parse", "--short", "HEAD"])
     if success and output:
         return output
     return ""

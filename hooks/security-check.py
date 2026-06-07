@@ -61,8 +61,15 @@ def check_for_secrets(content, file_path):
     if "/examples/" in path_lower or path_lower.startswith("examples/"):
         return issues
 
-    # Skip test files checking for secret patterns
-    if "test" in file_path.lower() or "spec" in file_path.lower():
+    # Skip dedicated test/spec files only. Match on path *segments* and real
+    # test-file markers — the previous substring check wrongly skipped paths
+    # like src/contest/ or latest/ that merely contain "test"/"spec".
+    segments = path_lower.split("/")
+    test_dirs = {"test", "tests", "spec", "specs", "__tests__", "__mocks__"}
+    basename = segments[-1]
+    if test_dirs.intersection(segments) or any(
+        marker in basename for marker in (".test.", ".spec.", "_test.", "_spec.")
+    ):
         return issues
 
     for pattern, secret_type, remediation in SECRET_PATTERNS:

@@ -23,7 +23,7 @@ claude --plugin-dir /path/to/claude-workflow
 
 # Check plugin status
 /plugin
-# Look for "project-starter" in the Installed tab
+# Look for "trudogolik45-starter" in the Installed tab
 ```
 
 ## Test Procedure
@@ -176,4 +176,4 @@ If the workflow doesn't work as expected:
 1. Note the exact prompt used
 2. Copy the full output
 3. Check for error messages
-4. Report at: https://github.com/CloudAI-X/claude-workflow-v2/issues
+4. Report at: https://github.com/trudogolik45/claude-workflow-v2/issues

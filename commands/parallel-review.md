@@ -96,7 +96,7 @@ separate retrieval step. Read each review as it returns.
 ## Example Usage
 
 ```
-/project-starter:parallel-review src/auth src/api src/db
+/trudogolik45-starter:parallel-review src/auth src/api src/db
 ```
 
 This spawns 3 parallel reviewers (one per directory), completing in ~1/3 the time of sequential review.

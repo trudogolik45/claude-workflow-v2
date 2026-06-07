@@ -1,8 +1,8 @@
-# project-starter
+# trudogolik45-starter
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-v1.0.33+-blue.svg)](https://code.claude.com)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/CloudAI-X/claude-workflow-v2/pulls)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/trudogolik45/claude-workflow-v2/pulls)
 
 A universal Claude Code workflow plugin with specialized agents, skills, hooks, and output styles for any software project. Compatible with [skills.sh](https://skills.sh) — works with Claude Code, Cursor, Codex, and 35+ AI agents.
 
@@ -13,7 +13,7 @@ A universal Claude Code workflow plugin with specialized agents, skills, hooks, 
 ### Option 1: skills.sh (Recommended — Any Agent)
 
 ```bash
-npx skills add CloudAI-X/claude-workflow-v2
+npx skills add trudogolik45/claude-workflow-v2
 ```
 
 Installs skills to Claude Code, Cursor, Codex, Windsurf, Cline, and 35+ other AI agents automatically.
@@ -30,7 +30,7 @@ Installs the complete plugin: agents, commands, skills, and hooks.
 
 ```bash
 # Clone the plugin
-git clone https://github.com/CloudAI-X/claude-workflow-v2.git
+git clone https://github.com/trudogolik45/claude-workflow-v2.git
 
 # Run Claude Code with the plugin
 claude --plugin-dir ./claude-workflow-v2
@@ -55,7 +55,7 @@ for await (const message of query({
 
 ```bash
 # Install from marketplace (when available)
-claude plugin install project-starter
+claude plugin install trudogolik45-starter
 
 # Or install from local directory
 claude plugin install ./claude-workflow-v2
@@ -69,16 +69,16 @@ After loading the plugin, verify it's working:
 > /plugin
 ```
 
-Tab to **Installed** - you should see `project-starter` listed.
+Tab to **Installed** - you should see `trudogolik45-starter` listed.
 Tab to **Errors** - should be empty (no errors).
 
 These commands become available:
 
 ```
-/project-starter:architect    # Architecture-first mode
-/project-starter:rapid        # Ship fast mode
-/project-starter:commit       # Auto-generate commit message
-/project-starter:verify-changes  # Multi-agent verification
+/trudogolik45-starter:architect    # Architecture-first mode
+/trudogolik45-starter:rapid        # Ship fast mode
+/trudogolik45-starter:commit       # Auto-generate commit message
+/trudogolik45-starter:verify-changes  # Multi-agent verification
 ```
 
 ---
@@ -89,8 +89,8 @@ These commands become available:
 | ------------ | ----- | ----------------------------------------------------------------------- |
 | **Agents**   | 7     | Specialized subagents for code review, debugging, security, etc.        |
 | **Commands** | 26    | Slash commands for workflows, output styles, planning, and onboarding   |
-| **Skills**   | 14    | Knowledge domains with on-demand context loading                        |
-| **Hooks**    | 14    | Automation scripts for formatting, security, metrics, and notifications |
+| **Skills**   | 12    | Knowledge domains with on-demand context loading                        |
+| **Hooks**    | 11    | Automation scripts for formatting, security, metrics, and notifications |
 
 ---
 
@@ -101,7 +101,7 @@ These commands become available:
 **Auto-commit your changes:**
 
 ```
-> /project-starter:commit
+> /trudogolik45-starter:commit
 
 Looking at staged changes...
 ✓ Created commit: feat(auth): add JWT refresh token endpoint
@@ -110,7 +110,7 @@ Looking at staged changes...
 **Full git workflow:**
 
 ```
-> /project-starter:commit-push-pr
+> /trudogolik45-starter:commit-push-pr
 
 ✓ Committed: feat: add user dashboard
 ✓ Pushed to origin/feature/dashboard
@@ -120,7 +120,7 @@ Looking at staged changes...
 **Verify before shipping:**
 
 ```
-> /project-starter:verify-changes
+> /trudogolik45-starter:verify-changes
 
 Spawning verification agents...
 ├─ build-validator: ✓ Build passes
@@ -220,63 +220,63 @@ Hooks run automatically on events:
 
 ## Commands Reference
 
-All commands use the format `/project-starter:<command>`.
+All commands use the format `/trudogolik45-starter:<command>`.
 
 ### Output Styles
 
 | Command                      | Mode                                          |
 | ---------------------------- | --------------------------------------------- |
-| `/project-starter:architect` | System design mode - architecture before code |
-| `/project-starter:rapid`     | Fast development - ship quickly, iterate      |
-| `/project-starter:mentor`    | Teaching mode - explain the "why"             |
-| `/project-starter:review`    | Code review mode - strict quality             |
+| `/trudogolik45-starter:architect` | System design mode - architecture before code |
+| `/trudogolik45-starter:rapid`     | Fast development - ship quickly, iterate      |
+| `/trudogolik45-starter:mentor`    | Teaching mode - explain the "why"             |
+| `/trudogolik45-starter:review`    | Code review mode - strict quality             |
 
 ### Git Workflow (Inner-Loop)
 
 | Command                              | Purpose                                   |
 | ------------------------------------ | ----------------------------------------- |
-| `/project-starter:commit`            | Auto-generate conventional commit message |
-| `/project-starter:commit-push-pr`    | Commit → Push → Create PR (full workflow) |
-| `/project-starter:quick-fix`         | Fast fix for lint/type errors             |
-| `/project-starter:add-tests`         | Generate tests for recent changes         |
-| `/project-starter:lint-fix`          | Auto-fix all linting issues               |
-| `/project-starter:sync-branch`       | Sync with main (rebase or merge)          |
-| `/project-starter:summarize-changes` | Generate standup/PR summaries             |
+| `/trudogolik45-starter:commit`            | Auto-generate conventional commit message |
+| `/trudogolik45-starter:commit-push-pr`    | Commit → Push → Create PR (full workflow) |
+| `/trudogolik45-starter:quick-fix`         | Fast fix for lint/type errors             |
+| `/trudogolik45-starter:add-tests`         | Generate tests for recent changes         |
+| `/trudogolik45-starter:lint-fix`          | Auto-fix all linting issues               |
+| `/trudogolik45-starter:sync-branch`       | Sync with main (rebase or merge)          |
+| `/trudogolik45-starter:summarize-changes` | Generate standup/PR summaries             |
 
 ### Verification
 
 | Command                            | Purpose                                 |
 | ---------------------------------- | --------------------------------------- |
-| `/project-starter:verify-changes`  | Multi-subagent adversarial verification |
-| `/project-starter:validate-build`  | Build process validation                |
-| `/project-starter:run-tests`       | Tiered test execution                   |
-| `/project-starter:lint-check`      | Code quality checks                     |
-| `/project-starter:security-scan`   | Security vulnerability detection        |
-| `/project-starter:code-simplifier` | Post-implementation cleanup             |
+| `/trudogolik45-starter:verify-changes`  | Multi-subagent adversarial verification |
+| `/trudogolik45-starter:validate-build`  | Build process validation                |
+| `/trudogolik45-starter:run-tests`       | Tiered test execution                   |
+| `/trudogolik45-starter:lint-check`      | Code quality checks                     |
+| `/trudogolik45-starter:security-scan`   | Security vulnerability detection        |
+| `/trudogolik45-starter:code-simplifier` | Post-implementation cleanup             |
 
 ### Parallel
 
 | Command                             | Purpose                                  |
 | ----------------------------------- | ---------------------------------------- |
-| `/project-starter:parallel-review`  | Review multiple files/dirs via subagents |
-| `/project-starter:parallel-analyze` | Multi-perspective analysis via subagents |
+| `/trudogolik45-starter:parallel-review`  | Review multiple files/dirs via subagents |
+| `/trudogolik45-starter:parallel-analyze` | Multi-perspective analysis via subagents |
 
 ### Planning & Refactoring
 
 | Command                               | Purpose                                    |
 | ------------------------------------- | ------------------------------------------ |
-| `/project-starter:plan`               | Persistent PLAN.md with phase tracking     |
-| `/project-starter:refactor-guided`    | 4-phase systematic refactoring with safety |
-| `/project-starter:dependency-upgrade` | Safe dependency upgrades with rollback     |
+| `/trudogolik45-starter:plan`               | Persistent PLAN.md with phase tracking     |
+| `/trudogolik45-starter:refactor-guided`    | 4-phase systematic refactoring with safety |
+| `/trudogolik45-starter:dependency-upgrade` | Safe dependency upgrades with rollback     |
 
 ### Onboarding & Knowledge
 
 | Command                                   | Purpose                                   |
 | ----------------------------------------- | ----------------------------------------- |
-| `/project-starter:tutorial`               | Interactive guided tutorial for new users |
-| `/project-starter:bootstrap-repo`         | 10-agent parallel repo exploration        |
-| `/project-starter:save-session-learnings` | Persist session discoveries to docs       |
-| `/project-starter:metrics`                | View agent performance metrics            |
+| `/trudogolik45-starter:tutorial`               | Interactive guided tutorial for new users |
+| `/trudogolik45-starter:bootstrap-repo`         | 10-agent parallel repo exploration        |
+| `/trudogolik45-starter:save-session-learnings` | Persist session discoveries to docs       |
+| `/trudogolik45-starter:metrics`                | View agent performance metrics            |
 
 ---
 
@@ -310,8 +310,6 @@ Skills are knowledge domains that Claude uses autonomously when relevant.
 | `designing-apis`              | REST/GraphQL patterns and best practices              |
 | `parallel-execution`          | Multi-subagent parallel task execution patterns       |
 | `web-design-guidelines`       | Self-contained UI audit (A11Y, PERF, RD, SEC, I18N)   |
-| `vercel-react-best-practices` | React/Next.js performance optimization (45 rules)     |
-| `convex-backend`              | Convex backend development (functions, schemas, etc.) |
 | `database-design`             | Schema design, indexing, query optimization           |
 | `devops-infrastructure`       | Docker, CI/CD, deployment, IaC, monitoring            |
 | `error-handling`              | Error patterns, structured logging, retry/circuit     |
@@ -515,9 +513,8 @@ claude-workflow/
 │   ├── bootstrap-repo.md
 │   ├── save-session-learnings.md
 │   └── metrics.md
-├── skills/                   # 14 knowledge domains
+├── skills/                   # 12 knowledge domains
 │   ├── analyzing-projects/
-│   ├── convex-backend/
 │   ├── database-design/
 │   ├── designing-apis/
 │   ├── designing-architecture/
@@ -528,11 +525,10 @@ claude-workflow/
 │   ├── optimizing-performance/
 │   ├── parallel-execution/
 │   ├── security-patterns/
-│   ├── vercel-react-best-practices/
 │   └── web-design-guidelines/
 ├── hooks/
 │   ├── hooks.json            # Hook configuration
-│   └── 14 automation scripts # Pre/post tool, session, metrics, notifications
+│   └── 11 automation scripts # Pre/post tool, session, metrics, notifications
 ├── templates/                # User-copyable templates
 │   ├── CLAUDE.md.template
 │   ├── settings.json.template
@@ -557,16 +553,16 @@ claude-workflow/
 
 ## Multi-Agent Compatibility (skills.sh)
 
-This repo is fully compatible with [skills.sh](https://skills.sh) — the universal agent skills platform. Our 14 skills work with **38+ AI coding agents**:
+This repo is fully compatible with [skills.sh](https://skills.sh) — the universal agent skills platform. Our 12 skills work with **38+ AI coding agents**:
 
 | Agent           | Install Method                                                       |
 | --------------- | -------------------------------------------------------------------- |
-| **Claude Code** | `npx skills add CloudAI-X/claude-workflow-v2` or full plugin install |
-| **Cursor**      | `npx skills add CloudAI-X/claude-workflow-v2`                        |
-| **Codex**       | `npx skills add CloudAI-X/claude-workflow-v2`                        |
-| **Windsurf**    | `npx skills add CloudAI-X/claude-workflow-v2`                        |
-| **Cline**       | `npx skills add CloudAI-X/claude-workflow-v2`                        |
-| **35+ more**    | `npx skills add CloudAI-X/claude-workflow-v2`                        |
+| **Claude Code** | `npx skills add trudogolik45/claude-workflow-v2` or full plugin install |
+| **Cursor**      | `npx skills add trudogolik45/claude-workflow-v2`                        |
+| **Codex**       | `npx skills add trudogolik45/claude-workflow-v2`                        |
+| **Windsurf**    | `npx skills add trudogolik45/claude-workflow-v2`                        |
+| **Cline**       | `npx skills add trudogolik45/claude-workflow-v2`                        |
+| **35+ more**    | `npx skills add trudogolik45/claude-workflow-v2`                        |
 
 > **Note:** `npx skills add` installs **skills only**. For the full Claude Code experience (agents, commands, hooks), use `npx install-claude-workflow-v2@latest`.
 
@@ -586,7 +582,7 @@ Contributions welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=CloudAI-X/claude-workflow-v2&type=date&legend=top-left)](https://www.star-history.com/#CloudAI-X/claude-workflow-v2&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=trudogolik45/claude-workflow-v2&type=date&legend=top-left)](https://www.star-history.com/#trudogolik45/claude-workflow-v2&type=date&legend=top-left)
 
 ## Credits
 

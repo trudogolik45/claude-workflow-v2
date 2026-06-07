@@ -142,5 +142,5 @@ After user approval:
 
 ## Usage
 
-This command ships with the project-starter plugin. Invoke with: `/project-starter:code-simplifier`
+This command ships with the trudogolik45-starter plugin. Invoke with: `/trudogolik45-starter:code-simplifier`
 ```

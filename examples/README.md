@@ -4,7 +4,7 @@ Learn how to use multiple agents together for complex software engineering tasks
 
 ## Overview
 
-The project-starter plugin includes 7 specialized agents that can work together:
+The trudogolik45-starter plugin includes 7 specialized agents that can work together:
 
 | Agent | Purpose | Triggers On |
 |-------|---------|-------------|

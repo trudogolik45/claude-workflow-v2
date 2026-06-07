@@ -35,38 +35,6 @@ jobs:
           fi
           echo "All JSON files are valid."
 
-      - name: Validate Codex hook script references
-        run: |
-          echo "=== Checking Codex hook script references ==="
-          errors=0
-          scripts=$(python3 -c "
-          import json
-          import re
-          with open('.codex/hooks.json') as f:
-              data = json.load(f)
-          for event_hooks in data.get('hooks', {}).values():
-              for group in event_hooks:
-                  for hook in group.get('hooks', []):
-                      cmd = hook.get('command', '')
-                      for match in re.findall(r'/hooks/([^\"\\s]+\\.(?:py|sh))', cmd):
-                          print(f'hooks/{match}')
-          ")
-
-          for script in $scripts; do
-            if [ -f "$script" ]; then
-              echo "  OK: $script exists"
-            else
-              echo "  FAIL: $script not found (referenced in .codex/hooks.json)"
-              errors=$((errors + 1))
-            fi
-          done
-
-          if [ "$errors" -gt 0 ]; then
-            echo "::error::$errors hook script reference(s) are broken"
-            exit 1
-          fi
-          echo "All hook script references are valid."
-
       - name: Check Python syntax for .py hooks
         run: |
           echo "=== Checking Python syntax ==="
@@ -105,56 +73,6 @@ jobs:
           fi
           echo "All Bash hooks have valid syntax."
 
-      - name: Validate Codex agent configuration
-        run: |
-          echo "=== Validating Codex agent TOML ==="
-          errors=0
-          python3 - <<'PY'
-          import sys
-          import tomllib
-          from pathlib import Path
-
-          errors = 0
-
-          config_path = Path(".codex/config.toml")
-          if not config_path.exists():
-              print("  FAIL: .codex/config.toml is missing")
-              sys.exit(1)
-
-          config = tomllib.loads(config_path.read_text(encoding="utf-8"))
-          agents = config.get("agents", {})
-          role_names = [name for name, value in agents.items() if isinstance(value, dict)]
-          if not role_names:
-              print("  FAIL: .codex/config.toml does not declare any [agents.<name>] roles")
-              sys.exit(1)
-
-          for role_name in sorted(role_names):
-              role = agents[role_name]
-              config_file = role.get("config_file")
-              if not config_file:
-                  print(f"  FAIL: agent '{role_name}' is missing config_file")
-                  errors += 1
-                  continue
-              agent_path = (config_path.parent / config_file).resolve()
-              if not agent_path.exists():
-                  print(f"  FAIL: agent '{role_name}' references missing {config_file}")
-                  errors += 1
-                  continue
-              agent_config = tomllib.loads(agent_path.read_text(encoding='utf-8'))
-              if "developer_instructions" not in agent_config:
-                  print(f"  FAIL: {agent_path} is missing developer_instructions")
-                  errors += 1
-                  continue
-              if "name" in agent_config or "description" in agent_config:
-                  print(f"  FAIL: {agent_path} still contains legacy top-level name/description")
-                  errors += 1
-                  continue
-              print(f"  OK: {role_name} -> {config_file}")
-
-          if errors:
-              sys.exit(1)
-          PY
-
       - name: Validate skill frontmatter
         run: |
           echo "=== Validating skill YAML frontmatter ==="
@@ -191,51 +109,6 @@ jobs:
           fi
           echo "All skill frontmatter is valid."
 
-      - name: Validate Codex plugin manifest references
-        run: |
-          echo "=== Validating Codex plugin manifest references ==="
-          errors=0
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-
-          root = Path(".")
-          manifest_path = root / ".codex-plugin" / "plugin.json"
-          if not manifest_path.exists():
-              print("  FAIL: .codex-plugin/plugin.json is missing")
-              raise SystemExit(1)
-
-          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-          for key in ("skills", "hooks"):
-              rel = manifest.get(key)
-              if not rel:
-                  continue
-              target = (root / rel).resolve()
-              if not target.exists():
-                  print(f"  FAIL: manifest {key} path does not exist: {rel}")
-                  raise SystemExit(1)
-              print(f"  OK: manifest {key} path exists -> {rel}")
-
-          for key in ("composerIcon", "logo"):
-              rel = manifest.get("interface", {}).get(key)
-              if not rel:
-                  continue
-              target = (root / rel).resolve()
-              if not target.exists():
-                  print(f"  FAIL: interface asset missing: {rel}")
-                  raise SystemExit(1)
-              print(f"  OK: interface asset exists -> {rel}")
-
-          for rel in manifest.get("interface", {}).get("screenshots", []):
-              target = (root / rel).resolve()
-              if not target.exists():
-                  print(f"  FAIL: screenshot missing: {rel}")
-                  raise SystemExit(1)
-              print(f"  OK: screenshot exists -> {rel}")
-          PY
-
-          echo "Manifest reference check complete."
-
       - name: Summary
         if: always()
         run: |
@@ -245,9 +118,6 @@ jobs:
           echo ""
           echo "Checks performed:"
           echo "  1. JSON syntax validation"
-          echo "  2. Codex hook script reference validation"
-          echo "  3. Python hook syntax check"
-          echo "  4. Bash hook syntax check"
-          echo "  5. Codex agent TOML + registration validation"
-          echo "  6. Skill frontmatter validation (name, description)"
-          echo "  7. Codex plugin manifest reference validation"
+          echo "  2. Python hook syntax check"
+          echo "  3. Bash hook syntax check"
+          echo "  4. Skill frontmatter validation (name, description)"

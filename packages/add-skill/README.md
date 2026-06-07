@@ -39,7 +39,7 @@ That's it. Run `claude` to start.
 
 ## Repository
 
-https://github.com/CloudAI-X/claude-workflow-v2
+https://github.com/trudogolik45/claude-workflow-v2
 
 ## License
 

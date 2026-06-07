@@ -232,7 +232,7 @@ def main():
         total_changed = count_changed_files(changed_files)
         if total_changed > 10:
             suggestions.append(
-                f"  - {total_changed} files changed -> Consider running /project-starter:save-session-learnings"
+                f"  - {total_changed} files changed -> Consider running /trudogolik45-starter:save-session-learnings"
             )
 
         # Print suggestions if any

@@ -10,6 +10,16 @@
 - **Build**: `[build command]`
 - **Lint**: `[lint command]`
 
+## Git & PR Discipline
+
+> Carried over from the personal starter defaults. Adjust per project.
+
+- **One commit per file.** Never bundle changes to multiple files into one commit; each file gets its own descriptive message. Keeps history clean and `git bisect`/revert precise.
+- **Small PRs.** Target p50 ≈ 118 lines (additions + deletions); p90 < 500. Large migrations are the exception, not the norm.
+- **Squash-merge always.** One PR = one commit on `main`. Simplifies reverting whole features and removes "fix lint" noise.
+- **Conventional commits.** `<type>: <description>` — feat, fix, docs, refactor, test, chore.
+- **Plan before complex work.** Read-only plan first; confirm the approach, then implement.
+
 ## Development Workflow
 
 ### Making Changes

@@ -166,5 +166,5 @@ Before pushing:
 
 - The format-on-edit hook silently fails if formatter not installed (by design)
 - MCP permissions go in user's settings, not plugin
-- Commands are accessed via `/project-starter:<command-name>`
+- Commands are accessed via `/trudogolik45-starter:<command-name>`
 - All commands (output styles, inner-loop, verification) go in `commands/` at root

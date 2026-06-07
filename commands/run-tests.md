@@ -124,4 +124,4 @@ If tests fail:
 
 ## Usage
 
-This command ships with the project-starter plugin. Invoke with: `/project-starter:run-tests`
+This command ships with the trudogolik45-starter plugin. Invoke with: `/trudogolik45-starter:run-tests`

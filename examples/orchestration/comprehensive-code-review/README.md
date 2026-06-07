@@ -31,7 +31,7 @@ Each agent focuses on a specific aspect:
 ## Prerequisites
 
 - Claude Code v1.0.33+
-- project-starter plugin loaded
+- trudogolik45-starter plugin loaded
 - A codebase with recent changes to review
 
 ## Quick Start
