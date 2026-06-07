@@ -4,7 +4,6 @@ description: Testing strategy specialist for designing test suites, writing test
 tools: Read, Write, Edit, Glob, Grep, Bash
 model: sonnet
 permissionMode: acceptEdits
-skills: designing-tests
 ---
 
 # Test Architect Agent

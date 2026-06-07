@@ -4,7 +4,6 @@ description: Technical documentation specialist. Use for creating README files, 
 tools: Read, Write, Edit, Glob, Grep
 model: sonnet
 permissionMode: acceptEdits
-skills: designing-apis
 ---
 
 # Documentation Writer Agent

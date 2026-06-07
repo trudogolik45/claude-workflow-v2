@@ -4,7 +4,7 @@ description: Expert code review specialist. Use PROACTIVELY after writing or mod
 tools: Read, Grep, Glob, Bash
 model: sonnet
 permissionMode: default
-skills: managing-git, designing-tests
+skills: managing-git
 ---
 
 # Code Reviewer Agent

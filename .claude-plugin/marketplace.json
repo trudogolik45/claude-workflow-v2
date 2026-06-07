@@ -35,13 +35,10 @@
       "skills": [
         "./skills/analyzing-projects",
         "./skills/database-design",
-        "./skills/designing-apis",
         "./skills/designing-architecture",
-        "./skills/designing-tests",
         "./skills/devops-infrastructure",
         "./skills/error-handling",
         "./skills/managing-git",
-        "./skills/optimizing-performance",
         "./skills/parallel-execution",
         "./skills/security-patterns",
         "./skills/web-design-guidelines"
